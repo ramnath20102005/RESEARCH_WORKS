@@ -1,0 +1,14 @@
+# Large PDF files (exclude very large research papers)
+# Adjust threshold as needed - GitHub 100MB limit
+Review4.pdf
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NOTE: We KEEP smaller PDF files for reference:
+# - BasePaper.pdf (3.4MB)
+# - Review1.pdf (2.8MB)
+# - Review2.pdf (2.7MB)
+# - Review3.pdf (3.4MB)
+# - Review5.pdf (2.8MB)

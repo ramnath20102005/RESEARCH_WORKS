@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Large datasets (keep only AIPD_100000.csv for reproducibility)
+output/AIPD_100/
+output/AIPD_1000/
+output/AIPD_10000/
+
+# Large binary files
+*.npy
+*.npz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NOTE: We KEEP the following for research reproducibility:
+# - output/AIPD_100000/AIPD_100000.csv (6.5MB - main dataset)
+# - output/AIPD_100000/dataset_statistics.json (small metadata)
+# - output/AIPD_100000/metadata.json (small metadata)
+# - output/AIPD_100000/README.md (documentation)
+# - output/reports/ (generation reports)

@@ -1,0 +1,57 @@
+{
+  "dataset_info": {
+    "name": "AIPD_100000",
+    "version": "1.0.0",
+    "generation_date": "2026-08-03T12:42:50.032213",
+    "generator_version": "1.0.0"
+  },
+  "generation_parameters": {
+    "random_seed": 42,
+    "rows_requested": 100000,
+    "rows_generated": 100036,
+    "rejected_rows": 36,
+    "accepted_rows": 100000,
+    "success_rate": 0.9996401295533608,
+    "generation_time_seconds": 40.74049258232117
+  },
+  "dataset_structure": {
+    "rule_count": 7,
+    "feature_count": 12,
+    "policy_count": 7,
+    "policies": [
+      "Increase Difficulty",
+      "Maintain Difficulty",
+      "Reduce Difficulty",
+      "Probe Missing Concept",
+      "Ask Application Question",
+      "Ask Follow-up Question",
+      "Switch Topic"
+    ]
+  },
+  "feature_groups": {
+    "semantic_features": [
+      "Correctness Score",
+      "Concept Coverage",
+      "Reasoning Score",
+      "Missing Concepts"
+    ],
+    "behavioral_features": [
+      "Engagement Score",
+      "Confidence Score",
+      "Hesitation Score",
+      "Eye Contact Score"
+    ],
+    "context_features": [
+      "Difficulty",
+      "Correct Streak",
+      "Wrong Streak"
+    ]
+  },
+  "methodology": {
+    "rule_based_generation": true,
+    "correlated_feature_generation": true,
+    "performance_index_based_behavioral": true,
+    "validation_with_regeneration": true,
+    "deterministic": true
+  }
+}

@@ -1,0 +1,48 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Large datasets (adjust as needed)
+# AIPD_Generator/output/*.csv (comment out if small)
+
+# Large binary files
+*.npy
+*.npz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Subprojects have their own .gitignore
+# Keep them clean

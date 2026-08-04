@@ -1,0 +1,57 @@
+Classification Report - tabpfn_5000
+============================================================
+
+Class: 0
+  Precision: 0.9996
+  Recall: 1.0000
+  F1-Score: 0.9998
+  Support: 2250.0
+
+Class: 1
+  Precision: 1.0000
+  Recall: 1.0000
+  F1-Score: 1.0000
+  Support: 2250.0
+
+Class: 2
+  Precision: 1.0000
+  Recall: 1.0000
+  F1-Score: 1.0000
+  Support: 2250.0
+
+Class: 3
+  Precision: 0.9991
+  Recall: 0.9991
+  F1-Score: 0.9991
+  Support: 2250.0
+
+Class: 4
+  Precision: 1.0000
+  Recall: 0.9991
+  F1-Score: 0.9996
+  Support: 2250.0
+
+Class: 5
+  Precision: 0.9996
+  Recall: 1.0000
+  F1-Score: 0.9998
+  Support: 2250.0
+
+Class: 6
+  Precision: 1.0000
+  Recall: 1.0000
+  F1-Score: 1.0000
+  Support: 1500.0
+
+Class: macro avg
+  Precision: 0.9997
+  Recall: 0.9997
+  F1-Score: 0.9997
+  Support: 15000.0
+
+Class: weighted avg
+  Precision: 0.9997
+  Recall: 0.9997
+  F1-Score: 0.9997
+  Support: 15000.0
+

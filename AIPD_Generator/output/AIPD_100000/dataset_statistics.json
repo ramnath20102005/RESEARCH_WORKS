@@ -1,0 +1,523 @@
+{
+  "dataset_info": {
+    "total_samples": 100000,
+    "total_features": 12,
+    "num_classes": 7,
+    "classes": [
+      "Ask Follow-up Question",
+      "Maintain Difficulty",
+      "Switch Topic",
+      "Ask Application Question",
+      "Probe Missing Concept",
+      "Reduce Difficulty",
+      "Increase Difficulty"
+    ],
+    "feature_names": [
+      "Correctness Score",
+      "Concept Coverage",
+      "Reasoning Score",
+      "Missing Concepts",
+      "Engagement Score",
+      "Confidence Score",
+      "Hesitation Score",
+      "Eye Contact Score",
+      "Difficulty",
+      "Correct Streak",
+      "Wrong Streak"
+    ],
+    "memory_usage_mb": 28.75807762145996
+  },
+  "class_distribution": {
+    "Ask Follow-up Question": {
+      "count": 15000,
+      "percentage": 15.0
+    },
+    "Maintain Difficulty": {
+      "count": 15000,
+      "percentage": 15.0
+    },
+    "Ask Application Question": {
+      "count": 15000,
+      "percentage": 15.0
+    },
+    "Probe Missing Concept": {
+      "count": 15000,
+      "percentage": 15.0
+    },
+    "Reduce Difficulty": {
+      "count": 15000,
+      "percentage": 15.0
+    },
+    "Increase Difficulty": {
+      "count": 15000,
+      "percentage": 15.0
+    },
+    "Switch Topic": {
+      "count": 10000,
+      "percentage": 10.0
+    }
+  },
+  "feature_statistics": {
+    "Correctness Score": {
+      "dtype": "int64",
+      "count": 100000,
+      "missing": 0,
+      "min": 3.0,
+      "max": 100.0,
+      "mean": 72.16013,
+      "median": 78.0,
+      "std": 21.514886875990605,
+      "q25": 58.0,
+      "q75": 92.0
+    },
+    "Concept Coverage": {
+      "dtype": "int64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 100.0,
+      "mean": 70.20274,
+      "median": 73.0,
+      "std": 20.100002900337252,
+      "q25": 55.0,
+      "q75": 88.0
+    },
+    "Reasoning Score": {
+      "dtype": "int64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 100.0,
+      "mean": 73.11416,
+      "median": 82.0,
+      "std": 21.64529955173471,
+      "q25": 60.0,
+      "q75": 90.0
+    },
+    "Missing Concepts": {
+      "dtype": "int64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 8.0,
+      "mean": 2.5099,
+      "median": 2.0,
+      "std": 2.2552190248684276,
+      "q25": 1.0,
+      "q75": 4.0
+    },
+    "Engagement Score": {
+      "dtype": "float64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.67058489,
+      "median": 0.699,
+      "std": 0.2129738418967485,
+      "q25": 0.517,
+      "q75": 0.865
+    },
+    "Confidence Score": {
+      "dtype": "float64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.64415358,
+      "median": 0.669,
+      "std": 0.21699684732617913,
+      "q25": 0.487,
+      "q75": 0.843
+    },
+    "Hesitation Score": {
+      "dtype": "float64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.35401668999999997,
+      "median": 0.311,
+      "std": 0.2398016786427791,
+      "q25": 0.137,
+      "q75": 0.518
+    },
+    "Eye Contact Score": {
+      "dtype": "float64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.65756342,
+      "median": 0.683,
+      "std": 0.21561021435810726,
+      "q25": 0.505,
+      "q75": 0.854
+    },
+    "Difficulty": {
+      "dtype": "str",
+      "count": 100000,
+      "missing": 0,
+      "unique": 3,
+      "most_common": "Medium",
+      "value_counts": {
+        "Medium": 42451,
+        "Easy": 35055,
+        "Hard": 22494
+      }
+    },
+    "Correct Streak": {
+      "dtype": "int64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 5.0,
+      "mean": 0.5509,
+      "median": 0.0,
+      "std": 0.794729832053044,
+      "q25": 0.0,
+      "q75": 1.0
+    },
+    "Wrong Streak": {
+      "dtype": "int64",
+      "count": 100000,
+      "missing": 0,
+      "min": 0.0,
+      "max": 5.0,
+      "mean": 0.64613,
+      "median": 0.0,
+      "std": 1.1320242214230132,
+      "q25": 0.0,
+      "q75": 1.0
+    }
+  },
+  "correlations": {
+    "semantic_features": {
+      "Correctness Score": {
+        "Correctness Score": 1.0,
+        "Concept Coverage": 0.9524350366450761,
+        "Reasoning Score": 0.949186652525464,
+        "Missing Concepts": -0.8506174290961166
+      },
+      "Concept Coverage": {
+        "Correctness Score": 0.9524350366450761,
+        "Concept Coverage": 1.0,
+        "Reasoning Score": 0.930369710267254,
+        "Missing Concepts": -0.8546448788675675
+      },
+      "Reasoning Score": {
+        "Correctness Score": 0.949186652525464,
+        "Concept Coverage": 0.930369710267254,
+        "Reasoning Score": 1.0,
+        "Missing Concepts": -0.8278839345661895
+      },
+      "Missing Concepts": {
+        "Correctness Score": -0.8506174290961166,
+        "Concept Coverage": -0.8546448788675675,
+        "Reasoning Score": -0.8278839345661895,
+        "Missing Concepts": 1.0
+      }
+    },
+    "behavioral_features": {
+      "Engagement Score": {
+        "Engagement Score": 1.0,
+        "Confidence Score": 0.9545862640778289,
+        "Hesitation Score": -0.9348630066848762,
+        "Eye Contact Score": 0.9313466498105182
+      },
+      "Confidence Score": {
+        "Engagement Score": 0.9545862640778289,
+        "Confidence Score": 1.0,
+        "Hesitation Score": -0.9449070847318196,
+        "Eye Contact Score": 0.9439907885083338
+      },
+      "Hesitation Score": {
+        "Engagement Score": -0.9348630066848762,
+        "Confidence Score": -0.9449070847318196,
+        "Hesitation Score": 1.0,
+        "Eye Contact Score": -0.9341446231997165
+      },
+      "Eye Contact Score": {
+        "Engagement Score": 0.9313466498105182,
+        "Confidence Score": 0.9439907885083338,
+        "Hesitation Score": -0.9341446231997165,
+        "Eye Contact Score": 1.0
+      }
+    },
+    "all_numerical": {
+      "Correctness Score": {
+        "Correctness Score": 1.0,
+        "Concept Coverage": 0.9524350366450761,
+        "Reasoning Score": 0.949186652525464,
+        "Missing Concepts": -0.8506174290961166,
+        "Engagement Score": 0.973300704915089,
+        "Confidence Score": 0.9594623992632386,
+        "Hesitation Score": -0.9391926993735097,
+        "Eye Contact Score": 0.9241999260005028,
+        "Correct Streak": -0.04134291069723569,
+        "Wrong Streak": -0.5855368081873583
+      },
+      "Concept Coverage": {
+        "Correctness Score": 0.9524350366450761,
+        "Concept Coverage": 1.0,
+        "Reasoning Score": 0.930369710267254,
+        "Missing Concepts": -0.8546448788675675,
+        "Engagement Score": 0.9321040769444904,
+        "Confidence Score": 0.9476724954976564,
+        "Hesitation Score": -0.9554928205212837,
+        "Eye Contact Score": 0.9671143085683505,
+        "Correct Streak": -0.058032713280192307,
+        "Wrong Streak": -0.5609742403738289
+      },
+      "Reasoning Score": {
+        "Correctness Score": 0.949186652525464,
+        "Concept Coverage": 0.930369710267254,
+        "Reasoning Score": 1.0,
+        "Missing Concepts": -0.8278839345661895,
+        "Engagement Score": 0.911396112150801,
+        "Confidence Score": 0.9218983180586732,
+        "Hesitation Score": -0.9618691230888948,
+        "Eye Contact Score": 0.9181126241599616,
+        "Correct Streak": -0.009264667276040132,
+        "Wrong Streak": -0.5995668730620599
+      },
+      "Missing Concepts": {
+        "Correctness Score": -0.8506174290961166,
+        "Concept Coverage": -0.8546448788675675,
+        "Reasoning Score": -0.8278839345661895,
+        "Missing Concepts": 1.0,
+        "Engagement Score": -0.8563437862587778,
+        "Confidence Score": -0.8533795955971617,
+        "Hesitation Score": 0.8583017672999621,
+        "Eye Contact Score": -0.8473284412387736,
+        "Correct Streak": 0.05968742196185781,
+        "Wrong Streak": 0.48093168692532107
+      },
+      "Engagement Score": {
+        "Correctness Score": 0.973300704915089,
+        "Concept Coverage": 0.9321040769444904,
+        "Reasoning Score": 0.911396112150801,
+        "Missing Concepts": -0.8563437862587778,
+        "Engagement Score": 1.0,
+        "Confidence Score": 0.9545862640778289,
+        "Hesitation Score": -0.9348630066848762,
+        "Eye Contact Score": 0.9313466498105182,
+        "Correct Streak": -0.0823607463401674,
+        "Wrong Streak": -0.5337010068902923
+      },
+      "Confidence Score": {
+        "Correctness Score": 0.9594623992632386,
+        "Concept Coverage": 0.9476724954976564,
+        "Reasoning Score": 0.9218983180586732,
+        "Missing Concepts": -0.8533795955971617,
+        "Engagement Score": 0.9545862640778289,
+        "Confidence Score": 1.0,
+        "Hesitation Score": -0.9449070847318196,
+        "Eye Contact Score": 0.9439907885083338,
+        "Correct Streak": -0.0906493645446869,
+        "Wrong Streak": -0.5334679578914097
+      },
+      "Hesitation Score": {
+        "Correctness Score": -0.9391926993735097,
+        "Concept Coverage": -0.9554928205212837,
+        "Reasoning Score": -0.9618691230888948,
+        "Missing Concepts": 0.8583017672999621,
+        "Engagement Score": -0.9348630066848762,
+        "Confidence Score": -0.9449070847318196,
+        "Hesitation Score": 1.0,
+        "Eye Contact Score": -0.9341446231997165,
+        "Correct Streak": 0.057705566999700385,
+        "Wrong Streak": 0.565304652389985
+      },
+      "Eye Contact Score": {
+        "Correctness Score": 0.9241999260005028,
+        "Concept Coverage": 0.9671143085683505,
+        "Reasoning Score": 0.9181126241599616,
+        "Missing Concepts": -0.8473284412387736,
+        "Engagement Score": 0.9313466498105182,
+        "Confidence Score": 0.9439907885083338,
+        "Hesitation Score": -0.9341446231997165,
+        "Eye Contact Score": 1.0,
+        "Correct Streak": -0.08974907548113148,
+        "Wrong Streak": -0.5361431241995708
+      },
+      "Correct Streak": {
+        "Correctness Score": -0.04134291069723569,
+        "Concept Coverage": -0.058032713280192307,
+        "Reasoning Score": -0.009264667276040132,
+        "Missing Concepts": 0.05968742196185781,
+        "Engagement Score": -0.0823607463401674,
+        "Confidence Score": -0.0906493645446869,
+        "Hesitation Score": 0.057705566999700385,
+        "Eye Contact Score": -0.08974907548113148,
+        "Correct Streak": 1.0,
+        "Wrong Streak": -0.39565967171495964
+      },
+      "Wrong Streak": {
+        "Correctness Score": -0.5855368081873583,
+        "Concept Coverage": -0.5609742403738289,
+        "Reasoning Score": -0.5995668730620599,
+        "Missing Concepts": 0.48093168692532107,
+        "Engagement Score": -0.5337010068902923,
+        "Confidence Score": -0.5334679578914097,
+        "Hesitation Score": 0.565304652389985,
+        "Eye Contact Score": -0.5361431241995708,
+        "Correct Streak": -0.39565967171495964,
+        "Wrong Streak": 1.0
+      }
+    }
+  },
+  "policy_specific_stats": {
+    "Ask Follow-up Question": {
+      "count": 15000,
+      "percentage": 15.0,
+      "feature_means": {
+        "Correctness Score": 77.0388,
+        "Concept Coverage": 72.05613333333334,
+        "Reasoning Score": 84.0308,
+        "Missing Concepts": 1.7976666666666667,
+        "Engagement Score": 0.7009340666666666,
+        "Confidence Score": 0.6710784666666666,
+        "Hesitation Score": 0.29877539999999997,
+        "Eye Contact Score": 0.6813942
+      },
+      "difficulty_distribution": {
+        "Easy": 7555,
+        "Medium": 7445
+      }
+    },
+    "Maintain Difficulty": {
+      "count": 15000,
+      "percentage": 15.0,
+      "feature_means": {
+        "Correctness Score": 59.858466666666665,
+        "Concept Coverage": 57.941066666666664,
+        "Reasoning Score": 61.8032,
+        "Missing Concepts": 3.017733333333333,
+        "Engagement Score": 0.548675,
+        "Confidence Score": 0.5188533333333333,
+        "Hesitation Score": 0.4816611333333333,
+        "Eye Contact Score": 0.5395029333333333
+      },
+      "difficulty_distribution": {
+        "Medium": 5036,
+        "Hard": 5003,
+        "Easy": 4961
+      }
+    },
+    "Switch Topic": {
+      "count": 10000,
+      "percentage": 10.0,
+      "feature_means": {
+        "Correctness Score": 95.0156,
+        "Concept Coverage": 93.0045,
+        "Reasoning Score": 93.9975,
+        "Missing Concepts": 0.1552,
+        "Engagement Score": 0.9202249,
+        "Confidence Score": 0.9101183,
+        "Hesitation Score": 0.0901222,
+        "Eye Contact Score": 0.9202117999999998
+      },
+      "difficulty_distribution": {
+        "Hard": 10000
+      }
+    },
+    "Ask Application Question": {
+      "count": 15000,
+      "percentage": 15.0,
+      "feature_means": {
+        "Correctness Score": 85.97633333333333,
+        "Concept Coverage": 83.99593333333333,
+        "Reasoning Score": 84.98813333333334,
+        "Missing Concepts": 1.0375333333333334,
+        "Engagement Score": 0.7790954,
+        "Confidence Score": 0.7496088,
+        "Hesitation Score": 0.22025033333333335,
+        "Eye Contact Score": 0.7596474666666666
+      },
+      "difficulty_distribution": {
+        "Medium": 15000
+      }
+    },
+    "Probe Missing Concept": {
+      "count": 15000,
+      "percentage": 15.0,
+      "feature_means": {
+        "Correctness Score": 64.9604,
+        "Concept Coverage": 62.06973333333333,
+        "Reasoning Score": 68.0204,
+        "Missing Concepts": 4.9844,
+        "Engagement Score": 0.5800273333333333,
+        "Confidence Score": 0.5494016666666667,
+        "Hesitation Score": 0.44898993333333337,
+        "Eye Contact Score": 0.5704006666666666
+      },
+      "difficulty_distribution": {
+        "Easy": 7539,
+        "Medium": 7461
+      }
+    },
+    "Reduce Difficulty": {
+      "count": 15000,
+      "percentage": 15.0,
+      "feature_means": {
+        "Correctness Score": 34.90606666666667,
+        "Concept Coverage": 37.9574,
+        "Reasoning Score": 32.94193333333333,
+        "Missing Concepts": 5.479533333333333,
+        "Engagement Score": 0.348828,
+        "Confidence Score": 0.31898259999999995,
+        "Hesitation Score": 0.7500731333333334,
+        "Eye Contact Score": 0.3294220666666667
+      },
+      "difficulty_distribution": {
+        "Medium": 7509,
+        "Hard": 7491
+      }
+    },
+    "Increase Difficulty": {
+      "count": 15000,
+      "percentage": 15.0,
+      "feature_means": {
+        "Correctness Score": 94.98373333333333,
+        "Concept Coverage": 91.995,
+        "Reasoning Score": 92.97826666666667,
+        "Missing Concepts": 0.31233333333333335,
+        "Engagement Score": 0.8995228666666667,
+        "Confidence Score": 0.8796868,
+        "Hesitation Score": 0.10027986666666668,
+        "Eye Contact Score": 0.8899142666666666
+      },
+      "difficulty_distribution": {
+        "Easy": 15000
+      }
+    }
+  },
+  "generation_metrics": {
+    "total_attempts": 100036,
+    "successful_generations": 100000,
+    "regenerated_rows": 36,
+    "success_rate": 0.9996401295533608,
+    "policy_counts": {
+      "Increase Difficulty": 15000,
+      "Maintain Difficulty": 15000,
+      "Reduce Difficulty": 15000,
+      "Probe Missing Concept": 15000,
+      "Ask Application Question": 15000,
+      "Ask Follow-up Question": 15000,
+      "Switch Topic": 10000
+    },
+    "validation_rejections": {
+      "High_correctness_with_many_missing": 1,
+      "High_confidence_with_high_hesitation": 0,
+      "Low_correctness_with_high_confidence": 0,
+      "Both_streaks_positive": 0,
+      "Easy_with_reduce_difficulty": 0,
+      "Hard_with_increase_difficulty": 0,
+      "Semantic_inconsistency": 35,
+      "Behavioral_inconsistency": 0,
+      "Context_inconsistency": 0,
+      "Policy_rule_mismatch": 0
+    }
+  }
+}

@@ -1,0 +1,67 @@
+# Environment variables (security - contains API keys)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+training.log
+
+# Large binary files (probabilities - too large for git)
+outputs/probabilities/
+*.npy
+*.npz
+
+# Large models (TabPFN models are 200+MB each, exceed GitHub 100MB limit)
+outputs/models/tabpfn_*.pkl
+
+# Model cache and training artifacts (not needed in git)
+catboost_info/
+*.json
+*.tsv
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NOTE: We KEEP the following for research reproducibility:
+# - outputs/models/random_forest.pkl (35MB - small baseline model)
+# - outputs/models/xgboost.pkl (1.7MB - small baseline model)
+# - outputs/models/catboost.pkl (427KB - small baseline model)
+# - outputs/reports/*.md (research documentation)
+# - outputs/reports/*.csv (metrics - small text files)
+# - outputs/classification_reports/*.txt (classification results)
+# - outputs/plots/*.png (visualization - small images)
+# - data/*.csv (dataset - if small, comment out if large)
