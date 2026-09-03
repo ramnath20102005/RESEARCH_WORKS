@@ -1,5 +1,6 @@
 # Environment variables
 .env
+*.env
 
 # Python
 __pycache__/
@@ -33,8 +34,18 @@ wheels/
 # Logs
 *.log
 
-# Large datasets (adjust as needed)
-# AIPD_Generator/output/*.csv (comment out if small)
+# Large models (>10 MB) - these should be downloaded separately
+# Small models (<10 MB) are included for convenience
+interview_training/outputs/models/random_forest.pkl
+interview_training/outputs/models/tabpfn_*.pkl
+adaptive/backend/kokoro-v1.0.onnx
+adaptive/backend/voices.bin
+
+# Large datasets
+*.csv
+# Exception: small CSV files (<5 MB) can be included
+# Uncomment specific small CSV files if needed:
+# AIPD_Generator/output/small_dataset.csv
 
 # Large binary files
 *.npy
@@ -43,6 +54,16 @@ wheels/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Cache directories
+.cache/
+.cache/
+
+# Temporary files
+*.tmp
+*.temp
+test_*.wav
+test_*.mp3
 
 # Subprojects have their own .gitignore
 # Keep them clean
