@@ -1,0 +1,23 @@
+
+    VICKKASH R
+    
+    Fake News Prediction Using Machine Learning
+    Developed a fake news detection system using ML algorithms (Naive Bayes, Passive Aggressive Classifier)
+    Technologies: Machine Learning, Python, scikit-learn
+    GITHUB: https://github.com/Vickkash/Fake-News-Prediction
+
+    E-COMMERCE MARKETPLACE
+    businesses to sell products directly without middlemen.
+    Full-Stack Implemented using React Native
+    Tech Stack: Node.js, Firebase (DB), Razorpay, Nodemailer (emails).
+    GITHUB: https://github.com/Vickkash/Kaithiran-web.git
+
+    TECHNICAL SKILLS
+    C, Java, JavaScript, Python, SQL, React, React Native, Firebase, Oracle, Deep Learning, NLP, OpenCV, TensorFlow, Git, GitHub
+
+    AREAS OF INTEREST
+    Machine Learning, Artificial Intelligence, Web Development, Cloud Computing, Cyber Security
+
+    CERTIFICATION
+    AWS Certified Solutions Architect
+    

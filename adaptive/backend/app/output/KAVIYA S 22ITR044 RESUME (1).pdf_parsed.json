@@ -1,0 +1,139 @@
+{
+  "projects": [
+    {
+      "project_name": "STUDENT E-LEARNING PLATFORM",
+      "description": ": https://github.com/MOUNISH24MAR/e-learnning-platform Link : An online learning platform with instructor and student registration,course management quiz and progress tracking About Tech Stack : ReactJS, Node.js, Express.js, MongoDB",
+      "technologies": [
+        "Express",
+        "Express.js",
+        "GitHub",
+        "MongoDB",
+        "Node.js",
+        "ReactJS"
+      ],
+      "github_link": "https://github.com/MOUNISH24MAR/e-learnning-platform",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        ": https://github",
+        "com/MOUNISH24MAR/e-learnning-platform Link : An online learning platform with instructor and student registration,course management quiz and progress tracking About Tech Stack : ReactJS, Node",
+        "js, Express",
+        "js, MongoDB"
+      ]
+    },
+    {
+      "project_name": "SOCIAL MEDIA PLATFORM",
+      "description": "Link : https://github.com/MOUNISH24MAR/mern-social-media About : Social networking platform with posts ,chat , group stories and real-time chats with notification support. Tech Stack : React.js,Node.js,Express.js,Socket.IO",
+      "technologies": [
+        "Express",
+        "Express.js",
+        "GitHub",
+        "Node.js",
+        "React",
+        "React.js",
+        "Socket.IO"
+      ],
+      "github_link": "https://github.com/MOUNISH24MAR/mern-social-media",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Link : https://github",
+        "com/MOUNISH24MAR/mern-social-media About : Social networking platform with posts ,chat , group stories and real-time chats with notification support",
+        "Tech Stack : React"
+      ]
+    },
+    {
+      "project_name": "INTELLIGENT PORTFOLIO WITH DATA ANALYTICS",
+      "description": ": Link https://github.com/MOUNISH24MAR/garment-portfolio About : Analytics platform for visualizing sales and export data insights and visualizes trends and performance metrices through interactive dashboard TechStack : Python , React.js , Node.js , MongoDB , c .",
+      "technologies": [
+        "C",
+        "GitHub",
+        "MongoDB",
+        "Node.js",
+        "Python",
+        "React",
+        "React.js",
+        "c ."
+      ],
+      "github_link": "https://github.com/MOUNISH24MAR/garment-portfolio",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        ": Link https://github",
+        "com/MOUNISH24MAR/garment-portfolio About : Analytics platform for visualizing sales and export data insights and visualizes trends and performance metrices through interactive dashboard TechStack : Python , React",
+        "js , MongoDB , c"
+      ]
+    }
+  ],
+  "technical_skills": {
+    "programming_languages": [
+      "C",
+      "Java",
+      "JavaScript",
+      "Python"
+    ],
+    "frontend": [
+      "CSS",
+      "HTML"
+    ],
+    "backend": [
+      "Socket.IO"
+    ],
+    "frameworks": [
+      "Express.js",
+      "Node.js",
+      "React"
+    ],
+    "libraries": [],
+    "database": [
+      "MongoDB",
+      "MySQL"
+    ],
+    "cloud": [],
+    "devops": [],
+    "ai_ml": [],
+    "tools": [],
+    "version_control": [
+      "GitHub"
+    ],
+    "operating_systems": []
+  },
+  "area_of_interest": [
+    "DBMS",
+    "OOPs",
+    "Data Structures"
+  ],
+  "certifications": [
+    {
+      "certificate_name": "JAVA SE 17 Certified Developer \u2013 Proficient in Java programming",
+      "issuer": "",
+      "year": "",
+      "credential_id": ""
+    }
+  ],
+  "statistics": {
+    "total_projects": 3,
+    "total_skills": 13,
+    "category_counts": {
+      "programming_languages": 4,
+      "frontend": 2,
+      "backend": 1,
+      "frameworks": 3,
+      "libraries": 0,
+      "database": 2,
+      "cloud": 0,
+      "devops": 0,
+      "ai_ml": 0,
+      "tools": 0,
+      "version_control": 1,
+      "operating_systems": 0
+    },
+    "top_skills": [
+      "Node.js",
+      "JavaScript",
+      "Express.js",
+      "React",
+      "GitHub"
+    ]
+  }
+}

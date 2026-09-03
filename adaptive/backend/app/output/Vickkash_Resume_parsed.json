@@ -1,0 +1,143 @@
+{
+  "projects": [
+    {
+      "project_name": "Fake News Prediction Using Machine Learning",
+      "description": "Developed a fake news detection system using ML algorithms (Naive Bayes, Logistic Regression) and NLP techniques. Processed and cleaned large text datasets, applying TF-IDF feature extraction. Improved accuracy through model tuning and validation, enabling effective misinformation detection.",
+      "technologies": [
+        "Git",
+        "GitHub",
+        "Machine Learning",
+        "NLP"
+      ],
+      "github_link": "https://github.com/Vickkash/fake-news-predicition.git",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Developed a fake news detection system using ML algorithms (Naive Bayes, Logistic Regression) and NLP techniques",
+        "Processed and cleaned large text datasets, applying TF-IDF feature extraction",
+        "Improved accuracy through model tuning and validation, enabling effective misinformation detection"
+      ]
+    },
+    {
+      "project_name": "Blood Group Detection Using Fingerprint",
+      "description": "Developed a non-invasive blood group prediction system using fingerprint pattern analysis. Applied OpenCV-based image processing and trained ML models to identify blood type patterns. Designed as a fast, affordable solution for rural and emergency",
+      "technologies": [
+        "OpenCV"
+      ],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Developed a non-invasive blood group prediction system using fingerprint pattern analysis",
+        "Applied OpenCV-based image processing and trained ML models to identify blood type patterns",
+        "Designed as a fast, affordable solution for rural and emergency"
+      ]
+    },
+    {
+      "project_name": "Kaithiran: Web Application For Rural Vendors",
+      "description": "Built a full-stack mobile application enabling rural artisans and small businesses to sell products directly without middlemen. Implemented using React Native, Node.js, Firebase (DB), Razorpay",
+      "technologies": [
+        "Firebase",
+        "Node.js",
+        "React",
+        "React Native"
+      ],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Built a full-stack mobile application enabling rural artisans and small businesses to sell products directly without middlemen",
+        "Implemented using React Native, Node",
+        "js, Firebase (DB), Razorpay"
+      ]
+    }
+  ],
+  "technical_skills": {
+    "programming_languages": [
+      "C",
+      "Java",
+      "JavaScript",
+      "Python",
+      "SQL"
+    ],
+    "frontend": [
+      "CSS",
+      "HTML"
+    ],
+    "backend": [],
+    "frameworks": [
+      "Node.js",
+      "React",
+      "React Native"
+    ],
+    "libraries": [],
+    "database": [
+      "Firebase",
+      "Oracle"
+    ],
+    "cloud": [],
+    "devops": [],
+    "ai_ml": [
+      "Deep Learning",
+      "NLP",
+      "OpenCV",
+      "TensorFlow"
+    ],
+    "tools": [],
+    "version_control": [
+      "Git",
+      "GitHub"
+    ],
+    "operating_systems": []
+  },
+  "area_of_interest": [
+    "Full-Stack",
+    "DBMS",
+    "Machine Learning"
+  ],
+  "certifications": [
+    {
+      "certificate_name": "Oracle Apex Cloud Developer",
+      "issuer": "Oracle",
+      "year": "",
+      "credential_id": ""
+    },
+    {
+      "certificate_name": "Java SE17 Developer",
+      "issuer": "",
+      "year": "",
+      "credential_id": ""
+    },
+    {
+      "certificate_name": "Getting Started with Deep Learning NVIDIA",
+      "issuer": "NVIDIA",
+      "year": "",
+      "credential_id": ""
+    }
+  ],
+  "statistics": {
+    "total_projects": 3,
+    "total_skills": 18,
+    "category_counts": {
+      "programming_languages": 5,
+      "frontend": 2,
+      "backend": 0,
+      "frameworks": 3,
+      "libraries": 0,
+      "database": 2,
+      "cloud": 0,
+      "devops": 0,
+      "ai_ml": 4,
+      "tools": 0,
+      "version_control": 2,
+      "operating_systems": 0
+    },
+    "top_skills": [
+      "GitHub",
+      "Git",
+      "JavaScript",
+      "Node.js",
+      "React"
+    ]
+  }
+}

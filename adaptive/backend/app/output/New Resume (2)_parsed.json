@@ -1,0 +1,172 @@
+{
+  "projects": [
+    {
+      "project_name": "Structural Engineer | Building Design | Sustainable Infrastructure",
+      "description": "+1-(234)-555-1234",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "+1-(234)-555-1234"
+      ]
+    },
+    {
+      "project_name": "Email",
+      "description": "linkedin.com",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": []
+    },
+    {
+      "project_name": "Jacksonville, Florida",
+      "description": "With over 8 years of experience in structural engineering, adept at using AutoCAD and Revit for innovative building design solutions. Known for excellent problem-solving skills, collaboration, and keen attention to detail. Successfully led a major commercial project, improving construction efficiency by 15%.",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "With over 8 years of experience in structural engineering, adept at using AutoCAD and Revit for innovative building design",
+      "key_features": [
+        "With over 8 years of experience in structural engineering, adept at using AutoCAD and Revit for innovative building design solutions",
+        "Known for excellent problem-solving skills, collaboration, and keen attention to detail",
+        "Successfully led a major commercial project, improving construction efficiency by 15%"
+      ]
+    },
+    {
+      "project_name": "Senior Structural Engineer",
+      "description": "GreenTech Engineering Solutions",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "GreenTech Engineering Solutions",
+      "key_features": [
+        "GreenTech Engineering Solutions"
+      ]
+    },
+    {
+      "project_name": "Orlando, Florida",
+      "description": "Designed and analyzed structural components for multiple residential and commercial projects, ensuring strict adherence to industry standards and client specifications. Managed cross-functional team collaborations, enhancing communication and project cohesion by serving as a liaison between different departments. Reviewed and approved technical documentation and construction plans, ensuring all designs met regulatory compliance. Achieved a 15% reduction in project costs through efficient material specification and supplier negotiations.",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Designed and analyzed structural components for multiple residential and commercial projects, ensuring strict adherence to industry standards and client specifications",
+        "Managed cross-functional team collaborations, enhancing communication and project cohesion by serving as a liaison between different departments",
+        "Reviewed and approved technical documentation and construction plans, ensuring all designs met regulatory compliance",
+        "Achieved a 15% reduction in project costs through efficient material specification and supplier negotiations"
+      ]
+    },
+    {
+      "project_name": "Tampa, Florida",
+      "description": "Assisted in the development and revision of structural analysis reports, which improved project workflows by 12%. Utilized SAP2000 and ETABS for performing detailed structural analyses on various engineering projects. Contributed to on-site inspections, leveraging strong communication skills to document findings and liaise with senior engineers. Prepared detailed engineering drawings and specifications under tight deadlines, demonstrating excellent time-management and technical drafting skills. Bachelor of Science in Civil Engineering University of Florida",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "Utilized SAP2000 and ETABS for performing detailed structural analyses on various engineering projects.",
+      "key_features": [
+        "Assisted in the development and revision of structural analysis reports, which improved project workflows by 12%",
+        "Utilized SAP2000 and ETABS for performing detailed structural analyses on various engineering projects",
+        "Contributed to on-site inspections, leveraging strong communication skills to document findings and liaise with senior engineers",
+        "Prepared detailed engineering drawings and specifications under tight deadlines, demonstrating excellent time-management and technical drafting skills",
+        "Bachelor of Science in Civil Engineering University of Florida"
+      ]
+    },
+    {
+      "project_name": "Led Major Commercial Project",
+      "description": "Oversaw a $5 million commercial project, improving construction efficiency and reducing time-to-completion by 15%. Publication in Engineering Journal Co-authored a publication in a reputable engineering journal, focusing on innovations in structural analysis. www.enhancv.com Powered by Innovation in Sustainable Design Received an industry award for developing a sustainable design technique that decreased material waste by 18%.",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "Publication in Engineering Journal",
+      "key_features": [
+        "Oversaw a $5 million commercial project, improving construction efficiency and reducing time-to-completion by 15%",
+        "Publication in Engineering Journal Co-authored a publication in a reputable engineering journal, focusing on innovations in structural analysis",
+        "com Powered by Innovation in Sustainable Design Received an industry award for developing a sustainable design technique that decreased material waste by 18%"
+      ]
+    },
+    {
+      "project_name": "Client Satisfaction Excellence",
+      "description": "Acknowledged by the company for achieving a 100% client satisfaction rate over two consecutive years.",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Acknowledged by the company for achieving a 100% client satisfaction rate over two consecutive years"
+      ]
+    },
+    {
+      "project_name": "Sustainable Building Practices",
+      "description": "Dedicated to advancing the principles of eco-friendly and sustainable construction methods in modern engineering. www.enhancv.com Powered by",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "engineering.",
+      "key_features": [
+        "Dedicated to advancing the principles of eco-friendly and sustainable construction methods in modern engineering",
+        "com Powered by"
+      ]
+    },
+    {
+      "project_name": "Community Volunteering",
+      "description": "Actively engaged in local community initiatives, promoting educational outreach in engineering fields.",
+      "technologies": [],
+      "github_link": "",
+      "live_demo": "",
+      "role": "outreach in engineering fields.",
+      "key_features": [
+        "Actively engaged in local community initiatives, promoting educational outreach in engineering fields"
+      ]
+    }
+  ],
+  "technical_skills": {
+    "programming_languages": [],
+    "frontend": [],
+    "backend": [],
+    "frameworks": [],
+    "libraries": [],
+    "database": [],
+    "cloud": [],
+    "devops": [],
+    "ai_ml": [],
+    "tools": [],
+    "version_control": [],
+    "operating_systems": []
+  },
+  "area_of_interest": [
+    "Sustainable Building Practices",
+    "Dedicated to advancing the principles of",
+    "eco-friendly and sustainable",
+    "construction methods in modern",
+    "engineering.",
+    "www.enhancv.com",
+    "Powered by",
+    "Community Volunteering",
+    "Actively engaged in local community",
+    "initiatives",
+    "promoting educational",
+    "outreach in engineering fields."
+  ],
+  "certifications": [],
+  "statistics": {
+    "total_projects": 10,
+    "total_skills": 0,
+    "category_counts": {
+      "programming_languages": 0,
+      "frontend": 0,
+      "backend": 0,
+      "frameworks": 0,
+      "libraries": 0,
+      "database": 0,
+      "cloud": 0,
+      "devops": 0,
+      "ai_ml": 0,
+      "tools": 0,
+      "version_control": 0,
+      "operating_systems": 0
+    },
+    "top_skills": []
+  }
+}

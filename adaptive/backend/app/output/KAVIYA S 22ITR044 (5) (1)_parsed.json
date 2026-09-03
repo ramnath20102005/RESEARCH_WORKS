@@ -1,0 +1,140 @@
+{
+  "projects": [
+    {
+      "project_name": "MENTOR CONNECT : ONLINE LEARNING APPLICATION",
+      "description": "https://github.com/kaviyasrinivasan/Mentor-Connect About : An online learning platform with the mentor-mentee registration, scheduling, and communication features. Tech Stack : ReactJS, Node.js, Express.js, MongoDB, Calendly API.",
+      "technologies": [
+        "Calendly API.",
+        "Express",
+        "Express.js",
+        "GitHub",
+        "MongoDB",
+        "Node.js",
+        "ReactJS"
+      ],
+      "github_link": "https://github.com/kaviyasrinivasan/Mentor-Connect",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "com/kaviyasrinivasan/Mentor-Connect About : An online learning platform with the mentor-mentee registration, scheduling, and communication features",
+        "Tech Stack : ReactJS, Node",
+        "js, Express",
+        "js, MongoDB, Calendly API"
+      ]
+    },
+    {
+      "project_name": "ATTENDIFY : QR-CODE BASED ATTENDANCE APP",
+      "description": "https://github.com/kaviyasrinivasan/QR_Scanner_Attendance-_App About : A Flutter-based attendance app with QR code scanning for efficient event check-ins and attendance tracking. Tech Stack : Flutter, Dart, Hive(local storage), Firebase.",
+      "technologies": [
+        "Dart",
+        "Firebase",
+        "Firebase.",
+        "Flutter",
+        "GitHub",
+        "Hive(local storage)"
+      ],
+      "github_link": "https://github.com/kaviyasrinivasan/QR_Scanner_Attendance-_App",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "com/kaviyasrinivasan/QR_Scanner_Attendance-_App About : A Flutter-based attendance app with QR code scanning for efficient event check-ins and attendance tracking",
+        "Tech Stack : Flutter, Dart, Hive(local storage), Firebase"
+      ]
+    },
+    {
+      "project_name": "INFIX TO POSTFIX CONVERTER:",
+      "description": "https://infixtopostfix.vercel.app/ About : A React-based infix to postfix expression converter that uses stack algorithms to transform mathematical expressions from standard notation to postfix form. Tech Stack : React.JS, Javascript, CSS, Vercel (deployment).",
+      "technologies": [
+        "CSS",
+        "JavaScript",
+        "Javascript",
+        "React",
+        "React.JS",
+        "Vercel",
+        "Vercel (deployment)."
+      ],
+      "github_link": "",
+      "live_demo": "https://infixtopostfix.vercel.app/",
+      "role": "",
+      "key_features": [
+        "app/ About : A React-based infix to postfix expression converter that uses stack algorithms to transform mathematical expressions from standard notation to postfix form",
+        "Tech Stack : React",
+        "JS, Javascript, CSS, Vercel (deployment)"
+      ]
+    }
+  ],
+  "technical_skills": {
+    "programming_languages": [
+      "C",
+      "Dart",
+      "Java",
+      "JavaScript"
+    ],
+    "frontend": [
+      "CSS"
+    ],
+    "backend": [],
+    "frameworks": [
+      "Express.js",
+      "Flutter",
+      "Node.js",
+      "React"
+    ],
+    "libraries": [],
+    "database": [
+      "Firebase",
+      "MongoDB",
+      "MySQL"
+    ],
+    "cloud": [
+      "Vercel"
+    ],
+    "devops": [],
+    "ai_ml": [
+      "Machine Learning"
+    ],
+    "tools": [],
+    "version_control": [
+      "GitHub"
+    ],
+    "operating_systems": []
+  },
+  "area_of_interest": [
+    "DBMS",
+    "OOPs",
+    "Data Structures"
+  ],
+  "certifications": [
+    {
+      "certificate_name": "MongoDB Certified Associate Developer \u2013 Proficient in MongoDB",
+      "issuer": "",
+      "year": "",
+      "credential_id": ""
+    }
+  ],
+  "statistics": {
+    "total_projects": 3,
+    "total_skills": 15,
+    "category_counts": {
+      "programming_languages": 4,
+      "frontend": 1,
+      "backend": 0,
+      "frameworks": 4,
+      "libraries": 0,
+      "database": 3,
+      "cloud": 1,
+      "devops": 0,
+      "ai_ml": 1,
+      "tools": 0,
+      "version_control": 1,
+      "operating_systems": 0
+    },
+    "top_skills": [
+      "React",
+      "MongoDB",
+      "GitHub",
+      "JavaScript",
+      "Node.js"
+    ]
+  }
+}

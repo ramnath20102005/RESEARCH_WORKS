@@ -1,0 +1,28 @@
+John Doe
+Software Engineer
+Email: john.doe@example.com | Phone: +1 555-019-2831 | Location: San Francisco, CA
+LinkedIn: linkedin.com/in/johndoe | GitHub: github.com/johndoe | Portfolio: https://johndoe.dev
+
+EDUCATION
+Bachelor of Technology in Computer Science
+State University, 2022
+CGPA: 3.85 / 4.0
+
+TECHNICAL SKILLS
+Programming Languages: Python, Java, JavaScript, C++
+Frontend: React, HTML5, CSS3, Redux, Vite
+Backend: Node.js, Express.js, FastAPI, Django
+Databases: MongoDB, PostgreSQL, Redis
+DevOps & Cloud: Docker, Kubernetes, AWS, Git, GitHub Actions
+AI/ML: PyTorch, TensorFlow, scikit-learn, Pandas
+
+WORK EXPERIENCE
+Senior Full Stack Engineer | TechCorp Inc. (2022 - Present)
+- Built scalable web applications using React, Node.js, and MongoDB.
+- Implemented machine learning data pipelines with PyTorch, Pandas, and scikit-learn.
+- Containerized microservices using Docker and deployed on AWS with GitHub Actions.
+
+PROJECTS
+Adaptive Interview System
+- Developed a local resume intelligence service with Python, FastAPI, and RapidFuzz for skill normalization.
+- Integrated TabPFN foundation models for candidate evaluation.

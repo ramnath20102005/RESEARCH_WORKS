@@ -1,0 +1,116 @@
+{
+  "projects": [
+    {
+      "project_name": "Fake News Prediction Using Machine Learning",
+      "description": "Developed a fake news detection system using ML algorithms (Naive Bayes, Passive Aggressive Classifier) Technologies: Machine Learning, Python, scikit-learn",
+      "technologies": [
+        "GitHub",
+        "Machine Learning",
+        "Python",
+        "scikit-learn"
+      ],
+      "github_link": "https://github.com/Vickkash/Fake-News-Prediction",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Developed a fake news detection system using ML algorithms (Naive Bayes, Passive Aggressive Classifier) Technologies: Machine Learning, Python, scikit-learn"
+      ]
+    },
+    {
+      "project_name": "E-COMMERCE MARKETPLACE",
+      "description": "businesses to sell products directly without middlemen. Full-Stack Implemented using React Native Tech Stack: Node.js, Firebase (DB), Razorpay, Nodemailer (emails).",
+      "technologies": [
+        "Firebase",
+        "Firebase (DB)",
+        "Git",
+        "GitHub",
+        "Node.js",
+        "Nodemailer (emails).",
+        "Razorpay",
+        "React",
+        "React Native"
+      ],
+      "github_link": "https://github.com/Vickkash/Kaithiran-web.git",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "businesses to sell products directly without middlemen",
+        "Full-Stack Implemented using React Native Tech Stack: Node",
+        "js, Firebase (DB), Razorpay, Nodemailer (emails)"
+      ]
+    }
+  ],
+  "technical_skills": {
+    "programming_languages": [
+      "C",
+      "Java",
+      "JavaScript",
+      "Python",
+      "R",
+      "SQL"
+    ],
+    "frontend": [],
+    "backend": [],
+    "frameworks": [
+      "Node.js",
+      "React",
+      "React Native"
+    ],
+    "libraries": [],
+    "database": [
+      "Firebase",
+      "Oracle"
+    ],
+    "cloud": [
+      "AWS"
+    ],
+    "devops": [],
+    "ai_ml": [
+      "Deep Learning",
+      "Machine Learning",
+      "NLP",
+      "OpenCV",
+      "TensorFlow",
+      "scikit-learn"
+    ],
+    "tools": [],
+    "version_control": [
+      "Git",
+      "GitHub"
+    ],
+    "operating_systems": []
+  },
+  "area_of_interest": [
+    "Artificial Intelligence",
+    "Web Development",
+    "Cloud Computing",
+    "Cyber Security",
+    "AWS Certified Solutions Architect"
+  ],
+  "certifications": [],
+  "statistics": {
+    "total_projects": 2,
+    "total_skills": 20,
+    "category_counts": {
+      "programming_languages": 6,
+      "frontend": 0,
+      "backend": 0,
+      "frameworks": 3,
+      "libraries": 0,
+      "database": 2,
+      "cloud": 1,
+      "devops": 0,
+      "ai_ml": 6,
+      "tools": 0,
+      "version_control": 2,
+      "operating_systems": 0
+    },
+    "top_skills": [
+      "GitHub",
+      "React",
+      "Git",
+      "JavaScript",
+      "Node.js"
+    ]
+  }
+}

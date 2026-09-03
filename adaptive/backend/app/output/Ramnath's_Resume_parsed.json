@@ -1,0 +1,131 @@
+{
+  "projects": [
+    {
+      "project_name": "Tools-Node.js,React,Open AI API,Mongo DB.",
+      "description": "Created an intelligent news curation platform with React and Node.js featuring automated content summarization, bias detection, and personalized news feeds using NewsAPI integration. \u00a7 github.com/ramnath20102005/News-Curator Safe Log AI",
+      "technologies": [
+        "GitHub",
+        "Node.js",
+        "React"
+      ],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Created an intelligent news curation platform with React and Node",
+        "js featuring automated content summarization, bias detection, and personalized news feeds using NewsAPI integration",
+        "com/ramnath20102005/News-Curator Safe Log AI"
+      ]
+    },
+    {
+      "project_name": "Tools-Node.js,Python,Flask,Presidio,Mongo DB.",
+      "description": "Built a secure log-analysis backend using Express and MongoDB that masks sensitive data, dedupli- cates errors via hashing, caches AI solutions, and integrates NVIDIA LLMs for automated debug- ging. \u00a7 github.com/ramnath20102005/Safe-ai",
+      "technologies": [
+        "Express",
+        "Flask",
+        "GitHub",
+        "MongoDB",
+        "Node.js",
+        "Python"
+      ],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Built a secure log-analysis backend using Express and MongoDB that masks sensitive data, dedupli- cates errors via hashing, caches AI solutions, and integrates NVIDIA LLMs for automated debug- ging",
+        "com/ramnath20102005/Safe-ai"
+      ]
+    },
+    {
+      "project_name": "Tools-Node.js,React,Mongo DB.",
+      "description": "Created an Intelligent Portfolio for garment man- ufacturing leveraging MERN to deliver data ana- lytics and operational tracking. The system auto- mates governance and risk detection, transforming complex manufacturing data into actionable intel- ligence. \u00a7 github.com/ramnath20102005/portfolio",
+      "technologies": [
+        "GitHub",
+        "Node.js",
+        "React"
+      ],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "Created an Intelligent Portfolio for garment man- ufacturing leveraging MERN to deliver data ana- lytics and operational tracking",
+        "The system auto- mates governance and risk detection, transforming complex manufacturing data into actionable intel- ligence",
+        "com/ramnath20102005/portfolio"
+      ]
+    }
+  ],
+  "technical_skills": {
+    "programming_languages": [
+      "C",
+      "Java",
+      "JavaScript",
+      "Python"
+    ],
+    "frontend": [
+      "CSS",
+      "HTML"
+    ],
+    "backend": [],
+    "frameworks": [
+      "Express.js",
+      "Flask",
+      "Node.js",
+      "React"
+    ],
+    "libraries": [],
+    "database": [
+      "MongoDB",
+      "MySQL",
+      "Oracle"
+    ],
+    "cloud": [],
+    "devops": [],
+    "ai_ml": [],
+    "tools": [
+      "Figma",
+      "VS Code"
+    ],
+    "version_control": [
+      "Git",
+      "GitHub"
+    ],
+    "operating_systems": []
+  },
+  "area_of_interest": [
+    "Data Structure",
+    "Web Development"
+  ],
+  "certifications": [
+    {
+      "certificate_name": "Oracle JAVA SE17 Developer - Oracle University",
+      "issuer": "Oracle",
+      "year": "",
+      "credential_id": ""
+    }
+  ],
+  "statistics": {
+    "total_projects": 3,
+    "total_skills": 17,
+    "category_counts": {
+      "programming_languages": 4,
+      "frontend": 2,
+      "backend": 0,
+      "frameworks": 4,
+      "libraries": 0,
+      "database": 3,
+      "cloud": 0,
+      "devops": 0,
+      "ai_ml": 0,
+      "tools": 2,
+      "version_control": 2,
+      "operating_systems": 0
+    },
+    "top_skills": [
+      "Node.js",
+      "GitHub",
+      "React",
+      "MongoDB",
+      "JavaScript"
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "programming_languages": [
+    "Python", "Java", "JavaScript", "TypeScript", "C", "C++", "C#", "Go", "Golang", "Rust", "Ruby",
+    "PHP", "Swift", "Kotlin", "Scala", "R", "Dart", "MATLAB", "Perl", "Haskell", "Elixir",
+    "Clojure", "Groovy", "Lua", "Julia", "Assembly", "Objective-C", "F#", "Shell", "Bash", "PowerShell", "SQL", "PL/SQL"
+  ],
+  "frontend": [
+    "HTML", "HTML5", "CSS", "CSS3", "Sass", "SCSS", "Less", "Tailwind CSS", "Bootstrap",
+    "Material UI", "Chakra UI", "AJAX", "WebAssembly"
+  ],
+  "backend": [
+    "REST API", "gRPC", "GraphQL", "Celery", "Microservices", "WebSockets", "Socket.IO"
+  ],
+  "frameworks": [
+    "React", "Angular", "Vue.js", "Svelte", "Next.js", "Nuxt.js", "Node.js", "Express", "Express.js",
+    "NestJS", "FastAPI", "Flask", "Django", "Spring", "Spring Boot", "Spring MVC", "ASP.NET",
+    "ASP.NET Core", "Laravel", "Symfony", "Ruby on Rails", "Phoenix", "Fiber", "Gin", "Ktor",
+    "Koa", "Fastify", "Flutter", "React Native"
+  ],
+  "libraries": [
+    "Redux", "Zustand", "MobX", "Webpack", "Vite", "Babel", "jQuery", "Pandas", "NumPy",
+    "SciPy", "Matplotlib", "Seaborn", "Plotly", "RxJS", "Lodash", "Axios", "RapidFuzz"
+  ],
+  "databases": [
+    "PostgreSQL", "MySQL", "MongoDB", "SQLite", "Redis", "Elasticsearch", "Cassandra", "DynamoDB",
+    "MariaDB", "Oracle", "Microsoft SQL Server", "Neo4j", "CouchDB", "CockroachDB", "Supabase",
+    "Firebase", "Pinecone", "Faiss", "Milvus", "Qdrant", "ChromaDB"
+  ],
+  "cloud": [
+    "AWS", "Amazon Web Services", "Microsoft Azure", "Azure", "Google Cloud Platform", "GCP",
+    "Heroku", "DigitalOcean", "Vercel", "Netlify", "Cloudflare", "OpenStack", "AWS EC2", "AWS S3",
+    "AWS Lambda", "Azure App Service", "GCP Cloud Run"
+  ],
+  "devops": [
+    "Docker", "Kubernetes", "Jenkins", "GitLab CI", "GitHub Actions", "Terraform", "Ansible",
+    "Puppet", "Chef", "Prometheus", "Grafana", "Helm", "ArgoCD", "CircleCI", "Travis CI",
+    "Nginx", "Apache", "HAProxy", "Kafka", "RabbitMQ"
+  ],
+  "ai_machine_learning": [
+    "PyTorch", "TensorFlow", "Keras", "scikit-learn", "OpenCV", "NLTK", "spaCy",
+    "Hugging Face", "Transformers", "LangChain", "LlamaIndex", "XGBoost", "LightGBM",
+    "CatBoost", "FastAI", "ONNX", "Deep Learning", "Machine Learning", "NLP"
+  ],
+  "tools": [
+    "Postman", "Swagger", "Jira", "Confluence", "Trello", "Figma", "Adobe XD", "VS Code",
+    "Visual Studio Code", "IntelliJ IDEA", "PyCharm", "Eclipse", "Docker Desktop", "Wireshark",
+    "Jupyter", "Zeppelin"
+  ],
+  "version_control": [
+    "Git", "GitHub", "GitLab", "Bitbucket", "SVN", "Mercurial"
+  ],
+  "operating_systems": [
+    "Linux", "Ubuntu", "Debian", "CentOS", "Red Hat", "Fedora", "Arch Linux", "macOS", "Windows", "Unix", "Android", "iOS"
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "candidate": {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "phone": "+1 555-019-2831",
+    "linkedin": "linkedin.com/in/johndoe",
+    "github": "github.com/johndoe",
+    "portfolio": "https://johndoe.dev",
+    "location": "San Francisco, CA\nLinkedIn"
+  },
+  "education": {
+    "college": "State University, 2022",
+    "degree": "Bachelor of Technology",
+    "branch": "Computer Science",
+    "cgpa": "3.85",
+    "graduation_year": "2022"
+  },
+  "projects": [
+    {
+      "title": "Adaptive Interview System",
+      "description": " - Developed a local resume intelligence service with Python, FastAPI, and RapidFuzz for skill normalization. - Integrated TabPFN foundation models for candidate evaluation."
+    }
+  ],
+  "experience": [
+    {
+      "details": "Senior Full Stack Engineer | TechCorp Inc. (2022 - Present)\n- Built scalable web applications using React, Node.js, and MongoDB.\n- Implemented machine learning data pipelines with PyTorch, Pandas, and scikit-learn.\n- Containerized microservices using Docker and deployed on AWS with GitHub Actions."
+    }
+  ],
+  "certifications": [],
+  "skills": {
+    "programming_languages": [
+      "Python",
+      "Java",
+      "JavaScript",
+      "C"
+    ],
+    "frontend": [
+      "React",
+      "HTML5",
+      "CSS3",
+      "Redux",
+      "Vite"
+    ],
+    "backend": [
+      "Node.js",
+      "Express.js",
+      "FastAPI",
+      "Django"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "MongoDB",
+      "Redis"
+    ],
+    "cloud": [
+      "AWS"
+    ],
+    "devops": [
+      "Docker",
+      "Kubernetes",
+      "GitHub Actions"
+    ],
+    "ai_ml": [
+      "PyTorch",
+      "TensorFlow",
+      "scikit-learn",
+      "Pandas",
+      "TabPFN"
+    ],
+    "tools": [],
+    "version_control": [
+      "Git",
+      "GitHub"
+    ],
+    "operating_systems": []
+  },
+  "skill_details": [
+    {
+      "skill": "Python",
+      "confidence": 1.0,
+      "category": "programming_languages",
+      "frequency": 2
+    },
+    {
+      "skill": "Java",
+      "confidence": 1.0,
+      "category": "programming_languages",
+      "frequency": 1
+    },
+    {
+      "skill": "JavaScript",
+      "confidence": 1.0,
+      "category": "programming_languages",
+      "frequency": 1
+    },
+    {
+      "skill": "C",
+      "confidence": 1.0,
+      "category": "programming_languages",
+      "frequency": 1
+    },
+    {
+      "skill": "React",
+      "confidence": 1.0,
+      "category": "frontend",
+      "frequency": 2
+    },
+    {
+      "skill": "HTML5",
+      "confidence": 1.0,
+      "category": "frontend",
+      "frequency": 1
+    },
+    {
+      "skill": "CSS3",
+      "confidence": 1.0,
+      "category": "frontend",
+      "frequency": 1
+    },
+    {
+      "skill": "Redux",
+      "confidence": 1.0,
+      "category": "frontend",
+      "frequency": 1
+    },
+    {
+      "skill": "Vite",
+      "confidence": 1.0,
+      "category": "frontend",
+      "frequency": 1
+    },
+    {
+      "skill": "Node.js",
+      "confidence": 1.0,
+      "category": "backend",
+      "frequency": 2
+    },
+    {
+      "skill": "Express.js",
+      "confidence": 1.0,
+      "category": "backend",
+      "frequency": 1
+    },
+    {
+      "skill": "FastAPI",
+      "confidence": 1.0,
+      "category": "backend",
+      "frequency": 2
+    },
+    {
+      "skill": "Django",
+      "confidence": 1.0,
+      "category": "backend",
+      "frequency": 1
+    },
+    {
+      "skill": "PostgreSQL",
+      "confidence": 1.0,
+      "category": "databases",
+      "frequency": 1
+    },
+    {
+      "skill": "MongoDB",
+      "confidence": 1.0,
+      "category": "databases",
+      "frequency": 2
+    },
+    {
+      "skill": "Redis",
+      "confidence": 1.0,
+      "category": "databases",
+      "frequency": 1
+    },
+    {
+      "skill": "AWS",
+      "confidence": 1.0,
+      "category": "cloud",
+      "frequency": 2
+    },
+    {
+      "skill": "Docker",
+      "confidence": 1.0,
+      "category": "devops",
+      "frequency": 2
+    },
+    {
+      "skill": "Kubernetes",
+      "confidence": 1.0,
+      "category": "devops",
+      "frequency": 1
+    },
+    {
+      "skill": "GitHub Actions",
+      "confidence": 1.0,
+      "category": "devops",
+      "frequency": 2
+    },
+    {
+      "skill": "PyTorch",
+      "confidence": 1.0,
+      "category": "ai_ml",
+      "frequency": 2
+    },
+    {
+      "skill": "TensorFlow",
+      "confidence": 1.0,
+      "category": "ai_ml",
+      "frequency": 1
+    },
+    {
+      "skill": "scikit-learn",
+      "confidence": 1.0,
+      "category": "ai_ml",
+      "frequency": 2
+    },
+    {
+      "skill": "Pandas",
+      "confidence": 1.0,
+      "category": "ai_ml",
+      "frequency": 2
+    },
+    {
+      "skill": "TabPFN",
+      "confidence": 1.0,
+      "category": "ai_ml",
+      "frequency": 1
+    },
+    {
+      "skill": "Git",
+      "confidence": 1.0,
+      "category": "version_control",
+      "frequency": 1
+    },
+    {
+      "skill": "GitHub",
+      "confidence": 1.0,
+      "category": "version_control",
+      "frequency": 4
+    }
+  ],
+  "statistics": {
+    "total_skills": 27,
+    "category_counts": {
+      "programming_languages": 4,
+      "frontend": 5,
+      "backend": 4,
+      "databases": 3,
+      "cloud": 1,
+      "devops": 3,
+      "ai_ml": 5,
+      "tools": 0,
+      "version_control": 2,
+      "operating_systems": 0
+    },
+    "top_skills": [
+      "GitHub",
+      "Python",
+      "React",
+      "Node.js",
+      "FastAPI"
+    ],
+    "average_confidence": 1.0,
+    "experience_level": "Advanced"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "projects": [
+    {
+      "project_name": "NewsHub Aggregator \u2013 AI Enhanced News Platform",
+      "description": "\u2013 Built an AI-powered news platform with authentication, real-time APIs, translation, bookmarks, and analytics dashboard. \u2013 Tech Stack: TypeScript, Next.js 14, MongoDB, External APIs",
+      "technologies": [
+        "External APIs",
+        "MongoDB",
+        "Next.js",
+        "Next.js 14",
+        "TypeScript"
+      ],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "\u2013 Built an AI-powered news platform with authentication, real-time APIs, translation, bookmarks, and analytics dashboard",
+        "\u2013 Tech Stack: TypeScript, Next",
+        "js 14, MongoDB, External APIs"
+      ]
+    },
+    {
+      "project_name": "Event Management System \u2013 Full Stack Application",
+      "description": "\u2013 Developed a role-based event management system with QR check-ins, admin dashboard, and participant tracking. \u2013 Tech Stack: React.js, Python, MongoDB Code Vulnerability Detector \u2013 AI Security Tool \u2013 Implemented an AI-based system to detect and classify insecure coding patterns using transformer models. \u2013 Tech Stack: Python, CodeT5, Hugging Face, HTML, CSS, JavaScript",
+      "technologies": [
+        "CSS",
+        "HTML",
+        "Hugging Face",
+        "JavaScript",
+        "MongoDB",
+        "Python",
+        "React",
+        "React.js"
+      ],
+      "github_link": "",
+      "live_demo": "",
+      "role": "",
+      "key_features": [
+        "\u2013 Developed a role-based event management system with QR check-ins, admin dashboard, and participant tracking",
+        "\u2013 Tech Stack: React",
+        "js, Python, MongoDB Code Vulnerability Detector \u2013 AI Security Tool \u2013 Implemented an AI-based system to detect and classify insecure coding patterns using transformer models",
+        "\u2013 Tech Stack: Python, CodeT5, Hugging Face, HTML, CSS, JavaScript"
+      ]
+    }
+  ],
+  "technical_skills": {
+    "programming_languages": [
+      "C",
+      "Java",
+      "JavaScript",
+      "Python",
+      "TypeScript"
+    ],
+    "frontend": [
+      "CSS",
+      "HTML"
+    ],
+    "backend": [],
+    "frameworks": [
+      "Express.js",
+      "Next.js",
+      "Node.js",
+      "React"
+    ],
+    "libraries": [],
+    "database": [
+      "MongoDB"
+    ],
+    "cloud": [],
+    "devops": [],
+    "ai_ml": [
+      "Hugging Face"
+    ],
+    "tools": [
+      "Figma"
+    ],
+    "version_control": [
+      "Git"
+    ],
+    "operating_systems": []
+  },
+  "area_of_interest": [
+    "Web Development",
+    "Machine Learning",
+    "Prompt Engineering",
+    "LEADERSHIP",
+    "Additional Treasurer \u2013 ISTE (2025-2026)",
+    "Cadet \u2013 NCC (A Certificate)"
+  ],
+  "certifications": [],
+  "statistics": {
+    "total_projects": 2,
+    "total_skills": 15,
+    "category_counts": {
+      "programming_languages": 5,
+      "frontend": 2,
+      "backend": 0,
+      "frameworks": 4,
+      "libraries": 0,
+      "database": 1,
+      "cloud": 0,
+      "devops": 0,
+      "ai_ml": 1,
+      "tools": 1,
+      "version_control": 1,
+      "operating_systems": 0
+    },
+    "top_skills": [
+      "React",
+      "JavaScript",
+      "MongoDB",
+      "Node.js",
+      "Express.js"
+    ]
+  }
+}
