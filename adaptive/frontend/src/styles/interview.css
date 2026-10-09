@@ -44,6 +44,36 @@
   gap: 1.5rem;
 }
 
+/* Research State Table Toggle */
+.research-table-toggle {
+  margin: 10px 0;
+}
+
+.toggle-button {
+  width: 100%;
+  padding: 12px 20px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-button:hover {
+  background: #5a6268;
+}
+
+.toggle-button.active {
+  background: #0066cc;
+}
+
+.toggle-button.active:hover {
+  background: #0056b3;
+}
+
 /* Camera Panel */
 .camera-panel {
   background: var(--bg-card);

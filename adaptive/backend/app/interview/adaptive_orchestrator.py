@@ -8,7 +8,7 @@ Feature Vector → TabPFN → Policy → Next Question → TTS → LOOP
 
 import logging
 import time
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 
 from .session_manager import SessionManager, InterviewSession
@@ -16,6 +16,7 @@ from .feature_builder import FeatureBuilder
 from .tabpfn_inference import TabPFNInference
 from ..llm.semantic_evaluator import SemanticEvaluator
 from ..llm.question_generator import QuestionGenerator
+from ..llm import get_llm_client
 from ..services.tts_service import TTSService
 from ..services.transcription_service import TranscriptionService
 
@@ -38,26 +39,28 @@ class AdaptiveInterviewOrchestrator:
     
     def __init__(
         self,
-        llm_client: Any,
         tabpfn_model_path: Optional[Path] = None
     ):
         """
         Initialize the adaptive interview orchestrator.
         
         Args:
-            llm_client: LLM client instance (NVIDIA, etc.)
             tabpfn_model_path: Optional custom path to TabPFN model
         """
+        # Get appropriate LLM clients based on configuration
+        semantic_client = get_llm_client(task="semantic")
+        question_client = get_llm_client(task="question")
+        
         # Initialize components
         self.session_manager = SessionManager()
-        self.semantic_evaluator = SemanticEvaluator(llm_client)
-        self.question_generator = QuestionGenerator(llm_client)
+        self.semantic_evaluator = SemanticEvaluator(semantic_client)
+        self.question_generator = QuestionGenerator(question_client)
         self.feature_builder = FeatureBuilder(random_seed=42)
         self.tabpfn_inference = TabPFNInference(tabpfn_model_path)
         self.tts_service = TTSService()
-        self.transcription_service = TranscriptionService(model_size="base", device="cpu")
+        self.transcription_service = TranscriptionService(model_size="base", device="cuda")
         
-        logger.info("[Orchestrator] Initialized all components")
+        logger.info("[Orchestrator] Initialized all components with separate LLM clients")
     
     def start_interview(
         self,
@@ -99,31 +102,38 @@ class AdaptiveInterviewOrchestrator:
             logger.info(f"[LLM][CALL] question_generation")
             logger.info(f"[LLM][CALL_COUNT] semantic=0 question_generation=1")
             
-            # Add question to session
+            # Add question to session with required concepts
             session.add_question(
-                question=first_question_response.question,
-                topic=first_question_response.topic,
-                difficulty=first_question_response.difficulty,
-                source=first_question_response.source
+                question=first_question_response['question'],
+                topic=first_question_response['topic'],
+                difficulty=first_question_response['difficulty'],
+                source=first_question_response['source'],
+                required_concepts=first_question_response.get('required_concepts', [])
             )
             
             # Generate TTS audio with selected voice
             tts_start = time.perf_counter()
-            tts_audio = self.tts_service.synthesize(first_question_response.question, voice=voice)
+            tts_audio = self.tts_service.synthesize(first_question_response['question'], voice=voice)
             tts_time = time.perf_counter() - tts_start
             logger.info(f"[PERF][START] tts_synthesis: {tts_time*1000:.0f} ms")
             
             total_time = time.perf_counter() - total_start
             logger.info(f"[PERF][START] total_backend: {total_time*1000:.0f} ms")
-            logger.info(f"[Orchestrator] First question generated: {first_question_response.question[:50]}...")
+            logger.info(f"[PERF][START] performance_breakdown:")
+            logger.info(f"[PERF][START]   session_creation: {session_time*1000:.0f} ms")
+            logger.info(f"[PERF][START]   question_generation: {question_time*1000:.0f} ms")
+            logger.info(f"[PERF][START]   tts_synthesis: {tts_time*1000:.0f} ms")
+            logger.info(f"[PERF][START]   total: {total_time*1000:.0f} ms")
+            logger.info(f"[Orchestrator] First question generated: {first_question_response['question'][:50]}...")
             
             return {
                 'session_id': session_id,
                 'question_number': session.question_number,
-                'question': first_question_response.question,
-                'topic': first_question_response.topic,
-                'difficulty': first_question_response.difficulty,
-                'source': first_question_response.source,
+                'question': first_question_response['question'],
+                'topic': first_question_response['topic'],
+                'difficulty': first_question_response['difficulty'],
+                'source': first_question_response['source'],
+                'required_concepts': first_question_response.get('required_concepts', []),
                 'tts_audio': tts_audio,
                 'context': session.get_context_summary()
             }
@@ -131,6 +141,62 @@ class AdaptiveInterviewOrchestrator:
         except Exception as e:
             logger.error(f"[Orchestrator] Failed to start interview: {str(e)}")
             raise Exception(f"Failed to start interview: {str(e)}")
+    
+    def _extract_available_topics(self, resume_data: Dict[str, Any], current_topic: str) -> List[str]:
+        """
+        Extract available topics from resume data for Switch Topic policy.
+        
+        Args:
+            resume_data: Parsed resume data
+            current_topic: Current topic to exclude
+        
+        Returns:
+            List of available topics (excluding current topic)
+        """
+        available_topics = []
+        
+        # Extract from skills
+        skills = resume_data.get('skills', [])
+        if isinstance(skills, list):
+            available_topics.extend([s for s in skills if s and s != current_topic])
+        
+        # Extract from projects
+        projects = resume_data.get('projects', [])
+        if isinstance(projects, list):
+            for project in projects:
+                tech_stack = project.get('tech_stack', [])
+                if isinstance(tech_stack, list):
+                    available_topics.extend([t for t in tech_stack if t and t != current_topic])
+        
+        # Extract from experience
+        experience = resume_data.get('experience', [])
+        if isinstance(experience, list):
+            for exp in experience:
+                exp_skills = exp.get('skills', [])
+                if isinstance(exp_skills, list):
+                    available_topics.extend([s for s in exp_skills if s and s != current_topic])
+        
+        # Remove duplicates and limit to reasonable number
+        available_topics = list(set(available_topics))[:10]
+        
+        logger.info(f"[Orchestrator] Extracted {len(available_topics)} available topics for Switch Topic")
+        return available_topics
+    
+    def get_research_state_history(self, session_id: str) -> List[Dict[str, Any]]:
+        """
+        Get the complete research state history for a session.
+        
+        Args:
+            session_id: The session identifier
+        
+        Returns:
+            List of research state records containing 11-feature vectors and selected policies
+        """
+        session = self.session_manager.get_session(session_id)
+        if not session:
+            raise ValueError(f"Session {session_id} not found")
+        
+        return session.get_research_state_history()
     
     def process_answer(
         self,
@@ -152,8 +218,13 @@ class AdaptiveInterviewOrchestrator:
             Dictionary containing evaluation, policy, and next question
         """
         logger.info(f"[Orchestrator] Processing answer for session {session_id} with voice: {voice}")
-        logger.info(f"[PERF][ANSWER] process_answer: 0.000s")
+        logger.info(f"[PERF][TOTAL] process_answer: 0.000s")
         total_start = time.perf_counter()
+        
+        # STT time is already included in the transcript (passed as parameter)
+        # We'll log it as 0 for now since STT happens outside this method
+        stt_time = 0.0
+        logger.info(f"[PERF][STT] transcription: {stt_time*1000:.0f} ms")
         
         try:
             # Get session
@@ -198,6 +269,7 @@ class AdaptiveInterviewOrchestrator:
                 topic=session.current_topic,
                 current_difficulty=session.current_difficulty,
                 answer=transcript,
+                required_concepts=session.current_required_concepts,
                 question_number=session.question_number,
                 correct_streak=session.correct_streak,
                 wrong_streak=session.wrong_streak
@@ -216,33 +288,23 @@ class AdaptiveInterviewOrchestrator:
             logger.info(f"Concept Coverage: {evaluation['semantic']['concept_coverage']}")
             logger.info(f"Reasoning: {evaluation['semantic']['reasoning_score']}")
             logger.info(f"Missing Concepts: {evaluation['semantic']['missing_concepts']}")
+            logger.info(f"Missing Concept List: {evaluation['semantic'].get('missing_concept_list', [])}")
             logger.info(f"is_correct: {evaluation['semantic']['is_correct']}")
             logger.info(f"Current Question Difficulty: {evaluation['question_assessment']['question_difficulty']}")
             logger.info(f"LLM latency: {eval_time*1000:.0f} ms")
             logger.info("=" * 70)
             logger.info("")
             
-            # Add evaluation to session
+            # Add evaluation to session (this updates streaks internally)
             session.add_evaluation(evaluation)
             
-            # Log [CONTEXT] section (streaks before/after)
+            # Log [CONTEXT] section (streaks after update)
             logger.info("")
             logger.info("=" * 70)
             logger.info("[CONTEXT]")
             logger.info("=" * 70)
-            logger.info(f"Previous correct streak: {session.correct_streak}")
-            logger.info(f"Previous wrong streak: {session.wrong_streak}")
-            
-            # Update streaks based on is_correct
-            if evaluation['semantic']['is_correct']:
-                session.correct_streak += 1
-                session.wrong_streak = 0
-            else:
-                session.wrong_streak += 1
-                session.correct_streak = 0
-            
-            logger.info(f"Updated correct streak: {session.correct_streak}")
-            logger.info(f"Updated wrong streak: {session.wrong_streak}")
+            logger.info(f"Current correct streak: {session.correct_streak}")
+            logger.info(f"Current wrong streak: {session.wrong_streak}")
             logger.info("=" * 70)
             logger.info("")
             
@@ -334,6 +396,7 @@ class AdaptiveInterviewOrchestrator:
             
             # Step 4: Apply Policy to Determine Effective Difficulty
             logger.info(f"[Orchestrator] Step 4: Apply Policy to Determine Effective Difficulty")
+            policy_start = time.perf_counter()
             
             current_difficulty = session.current_difficulty
             effective_difficulty = current_difficulty
@@ -349,19 +412,26 @@ class AdaptiveInterviewOrchestrator:
                     effective_difficulty = difficulty_order[current_index - 1]
                     policy_reason = f"Reduced from {current_difficulty} to {effective_difficulty}"
                 else:
+                    effective_difficulty = current_difficulty
                     policy_reason = f"Already at minimum difficulty ({current_difficulty})"
             elif predicted_policy == "Increase Difficulty":
                 if current_index < len(difficulty_order) - 1:
                     effective_difficulty = difficulty_order[current_index + 1]
                     policy_reason = f"Increased from {current_difficulty} to {effective_difficulty}"
                 else:
+                    effective_difficulty = current_difficulty
                     policy_reason = f"Already at maximum difficulty ({current_difficulty})"
             elif predicted_policy == "Maintain Difficulty":
+                effective_difficulty = current_difficulty
                 policy_reason = f"Maintained current difficulty ({current_difficulty})"
             else:
                 # For other policies (Ask Application Question, Ask Follow-up, Probe Missing Concept, Switch Topic)
                 # Maintain current difficulty unless explicitly changed by policy
+                effective_difficulty = current_difficulty
                 policy_reason = f"Policy '{predicted_policy}' does not change difficulty"
+            
+            policy_time = time.perf_counter() - policy_start
+            logger.info(f"[PERF][ANSWER] policy_application: {policy_time:.3f}s")
             
             # Log policy application
             logger.info("")
@@ -377,6 +447,29 @@ class AdaptiveInterviewOrchestrator:
             
             # Add policy to session
             session.add_policy(predicted_policy)
+            
+            # Step 4.5: Record research state for demonstration
+            # Capture the exact 11-feature vector and selected policy
+            # Use PascalCase keys to match feature_dict format for frontend
+            research_features = {
+                "Correctness Score": evaluation['semantic']['correctness_score'],
+                "Concept Coverage": evaluation['semantic']['concept_coverage'],
+                "Reasoning Score": evaluation['semantic']['reasoning_score'],
+                "Missing Concepts": evaluation['semantic']['missing_concepts'],
+                "Engagement Score": feature_dict['Engagement Score'],
+                "Confidence Score": feature_dict['Confidence Score'],
+                "Hesitation Score": feature_dict['Hesitation Score'],
+                "Eye Contact Score": feature_dict['Eye Contact Score'],
+                "Difficulty": feature_dict['Difficulty'],
+                "Correct Streak": feature_dict['Correct Streak'],
+                "Wrong Streak": feature_dict['Wrong Streak']
+            }
+
+            session.add_research_state(
+                features=research_features,
+                tabpfn_input_vector=feature_vector,
+                selected_policy=predicted_policy
+            )
             
             # Step 5: Generate Next Question
             logger.info(f"[Orchestrator] Step 4: Generate Next Question")
@@ -396,19 +489,27 @@ class AdaptiveInterviewOrchestrator:
             
             # Generate next question based on policy and effective difficulty
             question_start = time.perf_counter()
+            
+            # Extract available topics for Switch Topic
+            available_topics = self._extract_available_topics(session.resume_data, session.current_topic)
+            
             next_question_response = self.question_generator.generate_next_question(
                 policy=predicted_policy,
                 topic=session.current_topic,
-                current_difficulty=effective_difficulty,  # Use effective difficulty
+                current_difficulty=session.current_difficulty,
+                effective_difficulty=effective_difficulty,
                 previous_question=session.current_question,
                 candidate_answer=transcript,
                 correctness_score=evaluation['semantic']['correctness_score'],
                 concept_coverage=evaluation['semantic']['concept_coverage'],
                 reasoning_score=evaluation['semantic']['reasoning_score'],
                 missing_concepts=evaluation['semantic']['missing_concepts'],
+                missing_concept_list=evaluation['semantic'].get('missing_concept_list', []),
                 correct_streak=session.correct_streak,
                 wrong_streak=session.wrong_streak,
-                resume_data=session.resume_data
+                resume_data=session.resume_data,
+                available_topics=available_topics,
+                required_concepts=session.current_required_concepts
             )
             question_time = time.perf_counter() - question_start
             logger.info(f"[PERF][ANSWER] question_generation: {question_time:.3f}s")
@@ -438,7 +539,8 @@ class AdaptiveInterviewOrchestrator:
                 question=next_question_response['question'],
                 topic=next_question_response['topic'],
                 difficulty=next_question_response['difficulty'],
-                source=next_question_response['source']
+                source=next_question_response['source'],
+                required_concepts=next_question_response.get('required_concepts', [])
             )
             
             # Generate TTS audio for next question with selected voice
@@ -465,13 +567,15 @@ class AdaptiveInterviewOrchestrator:
             logger.info("=" * 70)
             logger.info("[TOTAL]")
             logger.info("=" * 70)
-            logger.info(f"Session retrieval: {session_time*1000:.0f} ms")
-            logger.info(f"Semantic LLM evaluation: {eval_time*1000:.0f} ms")
-            logger.info(f"Feature construction: {feature_time*1000:.0f} ms")
-            logger.info(f"TabPFN inference: {tabpfn_time*1000:.0f} ms")
-            logger.info(f"Question generation: {question_time*1000:.0f} ms")
-            logger.info(f"TTS synthesis: {tts_time*1000:.0f} ms")
-            logger.info(f"Total backend processing: {total_time*1000:.0f} ms")
+            logger.info(f"[PERF][STT] transcription: {stt_time*1000:.0f} ms")
+            logger.info(f"[PERF][SEMANTIC_EVALUATION] llm_evaluation: {eval_time*1000:.0f} ms")
+            logger.info(f"[PERF][BEHAVIOURAL_ANALYSIS] feature_building: {feature_time*1000:.0f} ms")
+            logger.info(f"[PERF][FEATURE_VECTOR] feature_building: {feature_time*1000:.0f} ms")
+            logger.info(f"[PERF][TABPFN] tabpfn_inference: {tabpfn_time*1000:.0f} ms")
+            logger.info(f"[PERF][POLICY_APPLICATION] policy_application: {policy_time*1000:.0f} ms")
+            logger.info(f"[PERF][QUESTION_GENERATION] question_generation: {question_time*1000:.0f} ms")
+            logger.info(f"[PERF][TTS] tts_synthesis: {tts_time*1000:.0f} ms")
+            logger.info(f"[PERF][TOTAL] total_backend: {total_time*1000:.0f} ms")
             logger.info("=" * 70)
             logger.info("")
             

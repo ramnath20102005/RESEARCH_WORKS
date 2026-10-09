@@ -35,13 +35,15 @@ class LLMClientProtocol(Protocol):
         ...
 
 
-def create_llm_client(provider: str = None) -> LLMClientProtocol:
+def create_llm_client(provider: str = None, task: str = None) -> LLMClientProtocol:
     """
-    Create an LLM client based on the specified provider.
+    Create an LLM client based on the specified provider and task.
     
     Args:
         provider: The LLM provider to use. Options: "local_qwen", "nvidia_nim".
                   If None, reads from LLM_PROVIDER environment variable.
+        task: Task type - "semantic" for evaluation, "question" for generation.
+              Used to select task-specific model when provider is local_qwen.
     
     Returns:
         An LLM client instance implementing LLMClientProtocol.
@@ -54,14 +56,25 @@ def create_llm_client(provider: str = None) -> LLMClientProtocol:
     
     provider = provider.lower()
     
-    logger.info(f"[LLMFactory] Creating LLM client with provider: {provider}")
+    logger.info(f"[LLMFactory] Creating LLM client with provider: {provider}, task: {task}")
     
     if provider == "local_qwen":
-        model_name = os.getenv("LOCAL_QWEN_MODEL", "Qwen/Qwen1.5-4B-Chat")
+        # Select model based on task
+        if task == "semantic":
+            model_name = os.getenv("SEMANTIC_MODEL", os.getenv("LOCAL_QWEN_MODEL", "Qwen/Qwen1.5-4B-Chat"))
+            quantization = os.getenv("SEMANTIC_QUANTIZATION", os.getenv("LOCAL_QWEN_QUANTIZATION", "int4"))
+        elif task == "question":
+            model_name = os.getenv("QUESTION_MODEL", os.getenv("LOCAL_QWEN_MODEL", "Qwen/Qwen1.5-4B-Chat"))
+            quantization = os.getenv("QUESTION_QUANTIZATION", os.getenv("LOCAL_QWEN_QUANTIZATION", "int4"))
+        else:
+            # Fallback to global model if no task specified
+            model_name = os.getenv("LOCAL_QWEN_MODEL", "Qwen/Qwen1.5-4B-Chat")
+            quantization = os.getenv("LOCAL_QWEN_QUANTIZATION", "int4")
+        
         device = os.getenv("LOCAL_QWEN_DEVICE", None)
-        quantization = os.getenv("LOCAL_QWEN_QUANTIZATION", "int4")
         
         logger.info(f"[LLMFactory] Local LLM configuration:")
+        logger.info(f"  Task: {task if task else 'default'}")
         logger.info(f"  Model: {model_name}")
         logger.info(f"  Device: {device if device else 'auto-detect'}")
         logger.info(f"  Quantization: {quantization}")

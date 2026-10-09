@@ -199,20 +199,32 @@ class TabPFNInference:
             probabilities = self.model.predict_proba(features_df)[0]
             predicted_class = int(np.argmax(probabilities, axis=0))
             
-            print("[TABPFN ACTUAL PREDICTION]")
-            print(f"Predicted class = {predicted_class}")
-            print(f"Probabilities = {probabilities}")
-            
-            # Map to policy label using VERIFIED mapping
-            predicted_policy = self.class_mapping.get(predicted_class, "Maintain Difficulty")
-            
-            print("[TABPFN POLICY]")
-            print(f"Predicted policy = {predicted_policy}")
-            print("=" * 70)
-            print("")
-            
             predict_time = time.perf_counter() - predict_start
-            logger.info(f"[PERF] tabpfn_prediction: {predict_time:.3f}s")
+            
+            # Get predicted policy from class mapping
+            predicted_policy = self.class_mapping.get(predicted_class, f"Unknown_{predicted_class}")
+            
+            # Log TabPFN probabilities for all 7 policies
+            logger.info("")
+            logger.info("=" * 60)
+            logger.info("[TABPFN PROBABILITIES]")
+            logger.info("=" * 60)
+            for i, prob in enumerate(probabilities):
+                policy_name = self.class_mapping.get(i, f"Class_{i}")
+                logger.info(f"{policy_name} = {prob:.4f}")
+            logger.info("=" * 60)
+            logger.info("")
+            
+            logger.info("")
+            logger.info("=" * 60)
+            logger.info("[TABPFN]")
+            logger.info("=" * 60)
+            logger.info(f"Predicted class = {predicted_class}")
+            logger.info(f"Predicted policy = {predicted_policy}")
+            logger.info("=" * 60)
+            logger.info("")
+            
+            logger.info(f"[PERF][TABPFN] inference: {predict_time*1000:.0f} ms")
             
             result = {
                 'predicted_class': predicted_class,

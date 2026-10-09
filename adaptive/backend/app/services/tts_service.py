@@ -204,7 +204,7 @@ class TTSService:
             # Cache the result
             self._cache[cache_key] = audio_bytes
             
-            total_time = time.time() - synth_start
+            total_time = time.perf_counter() - synth_start
             logger.info(f"[TTS] Total TTS time: {total_time:.2f}s (synthesis: {synthesis_time:.2f}s, encoding: {resample_time:.2f}s)")
             logger.info(f"[TTS] Synthesis complete: {len(audio_bytes)} bytes (16kHz mono WAV)")
             return audio_bytes

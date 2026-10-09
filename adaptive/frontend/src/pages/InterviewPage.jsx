@@ -11,7 +11,8 @@ import Transcript from '../components/Interview/Transcript/Transcript';
 import AudioRecorder from '../components/Interview/AudioRecorder/AudioRecorder';
 import VoiceSelector from '../components/Interview/VoiceSelector/VoiceSelector';
 import PerformancePanel from '../components/Interview/PerformancePanel/PerformancePanel';
-import { startAdaptiveInterviewApi, transcribeAdaptiveAudioApi, submitAdaptiveAnswerApi, getAdaptiveStateApi, endAdaptiveInterviewApi } from '../services/api';
+import ResearchStateTable from '../components/Interview/ResearchStateTable/ResearchStateTable';
+import { startAdaptiveInterviewApi, transcribeAdaptiveAudioApi, submitAdaptiveAnswerApi, getAdaptiveStateApi, endAdaptiveInterviewApi, getResearchStateApi } from '../services/api';
 import '../styles/interview.css';
 
 export default function InterviewPage({ parsedData }) {
@@ -35,6 +36,7 @@ export default function InterviewPage({ parsedData }) {
   const [performanceData, setPerformanceData] = useState([]);
   const [recordingStartTime, setRecordingStartTime] = useState(null);
   const [error, setError] = useState(null);
+  const [showResearchTable, setShowResearchTable] = useState(false);
   const audioRef = useRef(null);
 
   const technicalSkills = parsedData?.technical_skills || {};
@@ -140,7 +142,11 @@ export default function InterviewPage({ parsedData }) {
         question_number: 1,
         nvidia_llm: totalTime,
         kokoro: 0, // Will be updated when we get timing from backend
-        total: totalTime
+        total: totalTime,
+        details: {
+          model: 'Qwen/Qwen1.5-4B-Chat (local)',
+          voice: selectedVoice
+        }
       }]);
       
     } catch (error) {
@@ -308,7 +314,7 @@ export default function InterviewPage({ parsedData }) {
         tabpfn: 0, // Will be updated when we get timing from backend
         total: totalTime,
         details: {
-          model: 'meta/llama-3.1-8b-instruct',
+          model: 'Qwen/Qwen1.5-4B-Chat (local)',
           voice: selectedVoice,
           policy: response.metadata.policy
         }
@@ -490,6 +496,23 @@ export default function InterviewPage({ parsedData }) {
           />
           <PerformancePanel performanceData={performanceData} />
           <Transcript messages={messages} />
+          
+          {/* Research State Table Toggle */}
+          {isInterviewStarted && (
+            <div className="research-table-toggle">
+              <button
+                className={`toggle-button ${showResearchTable ? 'active' : ''}`}
+                onClick={() => setShowResearchTable(!showResearchTable)}
+              >
+                {showResearchTable ? 'Hide Research State' : 'Show Research State'}
+              </button>
+            </div>
+          )}
+
+          <ResearchStateTable
+            sessionId={sessionId}
+            isVisible={showResearchTable}
+          />
         </div>
       </div>
     </div>

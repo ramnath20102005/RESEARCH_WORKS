@@ -8,8 +8,7 @@ from typing import Optional, Dict, Any
 from app.services.parsing_service import ParsingService
 from app.services.transcription_service import TranscriptionService
 from app.services.tts_service import TTSService
-from app.llm import InterviewEngine, FirstQuestionRequest, AnswerEvaluationRequest
-from app.llm.llm_factory import create_llm_client
+from app.llm import InterviewEngine, FirstQuestionRequest, AnswerEvaluationRequest, get_llm_client
 from app.interview.adaptive_orchestrator import AdaptiveInterviewOrchestrator
 
 # Configure logging
@@ -18,9 +17,18 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 parsing_service = ParsingService()
-transcription_service = TranscriptionService()
+transcription_service = TranscriptionService(model_size="base", device="cuda")
 tts_service = TTSService()
-interview_engine = InterviewEngine()
+
+# Legacy interview engine - initialize only if LLM keys are available
+# Otherwise, will be None and legacy endpoints will return 503
+interview_engine = None
+try:
+    interview_engine = InterviewEngine()
+    logger.info("[API] Legacy interview engine initialized")
+except ValueError as e:
+    logger.warning(f"[API] Legacy interview engine not available: {str(e)}")
+    logger.warning("[API] Use adaptive interview endpoints instead")
 
 # Initialize adaptive orchestrator with LLM factory
 try:
@@ -35,28 +43,33 @@ try:
     
     init_start = time.perf_counter()
     
-    llm_client = create_llm_client()
-    logger.info(f"[ARCH] LLM_CLIENT={type(llm_client).__name__}")
-    logger.info(f"[ARCH] MODEL={os.getenv('LOCAL_QWEN_MODEL', 'Qwen/Qwen1.5-4B-Chat')}")
-    logger.info(f"[ARCH] DEVICE={os.getenv('LOCAL_QWEN_DEVICE', 'auto')}")
-    logger.info(f"[ARCH] QUANTIZATION={os.getenv('LOCAL_QWEN_QUANTIZATION', 'int4')}")
+    if os.getenv('LLM_PROVIDER') == 'local_qwen':
+        logger.info(f"[ARCH] MODEL={os.getenv('LOCAL_QWEN_MODEL', 'Qwen/Qwen1.5-4B-Chat')}")
+        logger.info(f"[ARCH] DEVICE={os.getenv('LOCAL_QWEN_DEVICE', 'auto')}")
+        logger.info(f"[ARCH] QUANTIZATION={os.getenv('LOCAL_QWEN_QUANTIZATION', 'int4')}")
+    elif os.getenv('LLM_PROVIDER') == 'nvidia_nim':
+        logger.info(f"[ARCH] REASONING_MODEL={os.getenv('NVIDIA_REASONING_MODEL', 'N/A')}")
+        logger.info(f"[ARCH] QUESTION_MODEL={os.getenv('NVIDIA_QUESTION_MODEL', 'N/A')}")
+    
     logger.info(f"[ARCH] TABPFN_ENABLED=True")
     logger.info("=" * 70)
     logger.info("")
     
-    # Force eager loading of LocalLLM model to avoid loading on first request
-    if hasattr(llm_client, '_load_model'):
-        try:
-            logger.info("[PERF][STARTUP] Eagerly loading LocalLLM model...")
-            llm_load_start = time.perf_counter()
-            llm_client._load_model()
-            llm_load_time = time.perf_counter() - llm_load_start
-            logger.info(f"[PERF][STARTUP] LocalLLM model load: {llm_load_time*1000:.0f} ms")
-            logger.info("[ARCH] LocalLLM model loaded and cached")
-        except Exception as e:
-            logger.warning(f"[API] Eager loading failed (will load on first request): {str(e)}")
+    # Initialize orchestrator (it will create its own LLM clients using get_llm_client)
+    adaptive_orchestrator = AdaptiveInterviewOrchestrator()
     
-    adaptive_orchestrator = AdaptiveInterviewOrchestrator(llm_client=llm_client)
+    # Force eager loading of LocalLLM model if using local provider
+    if os.getenv('LLM_PROVIDER') == 'local_qwen':
+        if hasattr(adaptive_orchestrator.semantic_evaluator.client, '_load_model'):
+            try:
+                logger.info("[PERF][STARTUP] Eagerly loading LocalLLM model...")
+                llm_load_start = time.perf_counter()
+                adaptive_orchestrator.semantic_evaluator.client._load_model()
+                llm_load_time = time.perf_counter() - llm_load_start
+                logger.info(f"[PERF][STARTUP] LocalLLM model load: {llm_load_time*1000:.0f} ms")
+                logger.info("[ARCH] LocalLLM model loaded and cached")
+            except Exception as e:
+                logger.warning(f"[API] Eager loading failed (will load on first request): {str(e)}")
     
     init_time = time.perf_counter() - init_start
     logger.info(f"[PERF][STARTUP] Total orchestrator initialization: {init_time*1000:.0f} ms")
@@ -130,6 +143,9 @@ async def start_interview(request: FirstQuestionRequest):
     """
     Generate the first interview question based on resume data.
     """
+    if not interview_engine:
+        raise HTTPException(status_code=503, detail="Legacy interview engine not available. Use adaptive interview endpoints instead.")
+    
     import time
     try:
         start_time = time.time()
@@ -156,6 +172,9 @@ async def evaluate_answer(request: AnswerEvaluationRequest):
     """
     Evaluate a candidate's answer to an interview question.
     """
+    if not interview_engine:
+        raise HTTPException(status_code=503, detail="Legacy interview engine not available. Use adaptive interview endpoints instead.")
+    
     try:
         # Evaluate the answer
         response = interview_engine.evaluate_answer(
@@ -440,6 +459,38 @@ async def get_adaptive_state(session_id: str):
     except Exception as e:
         logger.error(f"[API] /interview/adaptive/state failed: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to get session state: {str(e)}")
+
+
+@router.get("/interview/adaptive/research-state")
+async def get_research_state(session_id: str):
+    """
+    Get the complete research state history for an adaptive interview session.
+    
+    This returns the 11-feature vector and selected policy for each question-answer cycle,
+    enabling research demonstration of adaptive decision-making.
+    
+    Args:
+        session_id: The session identifier
+    
+    Returns:
+        Research state history with complete 11-feature vectors and policies
+    """
+    if not adaptive_orchestrator:
+        raise HTTPException(status_code=503, detail="Adaptive orchestrator not available")
+    
+    try:
+        research_state = adaptive_orchestrator.get_research_state_history(session_id)
+        return {
+            'session_id': session_id,
+            'research_state_history': research_state,
+            'behavioral_status': 'development values',
+            'note': 'Behavioral features are currently development/placeholder values. Real behavioral extraction will be implemented in future phases.'
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error(f"[API] /interview/adaptive/research-state failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get research state: {str(e)}")
 
 
 @router.post("/interview/adaptive/end")

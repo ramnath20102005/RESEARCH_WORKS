@@ -197,16 +197,16 @@ class FeatureBuilder:
         logger.info("=" * 60)
         logger.info(f"Correctness Score:")
         logger.info(f"    value = {correctness_score}")
-        logger.info(f"    source = NVIDIA NIM / Gemini evaluation")
+        logger.info(f"    source = semantic evaluation (LLM)")
         logger.info(f"Concept Coverage:")
         logger.info(f"    value = {concept_coverage}")
-        logger.info(f"    source = NVIDIA NIM / Gemini evaluation")
+        logger.info(f"    source = semantic evaluation (LLM)")
         logger.info(f"Reasoning Score:")
         logger.info(f"    value = {reasoning_score}")
-        logger.info(f"    source = NVIDIA NIM / Gemini evaluation")
+        logger.info(f"    source = semantic evaluation (LLM)")
         logger.info(f"Missing Concepts:")
         logger.info(f"    value = {missing_concepts}")
-        logger.info(f"    source = NVIDIA NIM / Gemini evaluation")
+        logger.info(f"    source = semantic evaluation (LLM)")
         logger.info("")
         
         # Determine performance level for behavioral constraints
@@ -271,6 +271,16 @@ class FeatureBuilder:
         
         # Build feature vector in exact order
         feature_vector = [feature_dict[feature] for feature in self.FEATURE_ORDER]
+        
+        # Log exact 11-feature vector with names before TabPFN
+        logger.info("")
+        logger.info("=" * 60)
+        logger.info("[MODEL INPUT]")
+        logger.info("=" * 60)
+        for name, value in zip(self.FEATURE_ORDER, feature_vector):
+            logger.info(f"{name} = {value}")
+        logger.info("=" * 60)
+        logger.info("")
         
         # Log feature values for debugging
         logger.info(f"[FeatureBuilder] Feature vector built:")

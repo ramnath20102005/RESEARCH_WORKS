@@ -33,6 +33,7 @@ class InterviewSession:
         self.current_question: Optional[str] = None
         self.current_topic: Optional[str] = None
         self.current_difficulty: str = "Easy"  # Start with Easy
+        self.current_required_concepts: List[str] = []
         
         # Streaks (calculated from is_correct history)
         self.correct_streak = 0
@@ -43,6 +44,7 @@ class InterviewSession:
         self.answer_history: List[Dict[str, Any]] = []
         self.evaluation_history: List[Dict[str, Any]] = []
         self.policy_history: List[Dict[str, Any]] = []
+        self.research_state_history: List[Dict[str, Any]] = []
         
         # Session status
         self.is_active = True
@@ -55,7 +57,8 @@ class InterviewSession:
         question: str,
         topic: str,
         difficulty: str,
-        source: str = "Skill"
+        source: str = "Skill",
+        required_concepts: list = None
     ):
         """
         Add a question to the session history.
@@ -65,11 +68,16 @@ class InterviewSession:
             topic: The question topic
             difficulty: The question difficulty (Easy/Medium/Hard)
             source: The source of the question (Project/Internship/Skill)
+            required_concepts: List of required concepts for this question
         """
+        if required_concepts is None:
+            required_concepts = []
+        
         self.question_number += 1
         self.current_question = question
         self.current_topic = topic
         self.current_difficulty = difficulty
+        self.current_required_concepts = required_concepts
         
         self.question_history.append({
             'question_number': self.question_number,
@@ -77,10 +85,11 @@ class InterviewSession:
             'topic': topic,
             'difficulty': difficulty,
             'source': source,
+            'required_concepts': required_concepts,
             'timestamp': datetime.now().isoformat()
         })
         
-        logger.info(f"[Session] Q{self.question_number}: {question[:50]}... (Difficulty: {difficulty})")
+        logger.info(f"[Session] Q{self.question_number}: {question[:50]}... (Difficulty: {difficulty}, Concepts: {required_concepts})")
     
     def add_answer(
         self,
@@ -150,6 +159,52 @@ class InterviewSession:
         })
         
         logger.info(f"[Session] P{self.question_number}: Policy={policy}")
+    
+    def add_research_state(
+        self,
+        features: Dict[str, Any],
+        tabpfn_input_vector: List[float],
+        selected_policy: str
+    ):
+        """
+        Add a complete research state record for the current question-answer cycle.
+        
+        This captures the exact 11-feature vector used by TabPFN and the selected policy,
+        enabling research demonstration of adaptive decision-making.
+        
+        Args:
+            features: Dictionary containing all 11 feature values
+            tabpfn_input_vector: The exact 11-feature vector sent to TabPFN
+            selected_policy: The policy selected by TabPFN
+        """
+        research_state = {
+            'question_number': self.question_number,
+            'question': self.current_question,
+            'topic': self.current_topic,
+            'features': features,
+            'tabpfn_input_vector': tabpfn_input_vector,
+            'selected_policy': selected_policy,
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        self.research_state_history.append(research_state)
+        
+        logger.info("")
+        logger.info("=" * 70)
+        logger.info("[RESEARCH STATE]")
+        logger.info("=" * 70)
+        logger.info(f"Question Number: {self.question_number}")
+        logger.info(f"Question: {self.current_question[:50]}...")
+        logger.info(f"11-Feature Vector:")
+        for i, (name, value) in enumerate(zip([
+            "Correctness Score", "Concept Coverage", "Reasoning Score", "Missing Concepts",
+            "Engagement Score", "Confidence Score", "Hesitation Score", "Eye Contact Score",
+            "Difficulty", "Correct Streak", "Wrong Streak"
+        ], tabpfn_input_vector)):
+            logger.info(f"  {i+1}. {name} = {value}")
+        logger.info(f"Selected Policy: {selected_policy}")
+        logger.info("=" * 70)
+        logger.info("")
     
     def get_context_summary(self) -> Dict[str, Any]:
         """
@@ -249,8 +304,18 @@ class InterviewSession:
             'avg_reasoning': round(avg_reasoning, 2),
             'correct_answers': correct_count,
             'accuracy': round(correct_count / total_evaluations * 100, 2) if total_evaluations > 0 else 0,
-            'policy_distribution': self._get_policy_distribution()
+            'policy_distribution': self._get_policy_distribution(),
+            'research_state_history': self.research_state_history
         }
+    
+    def get_research_state_history(self) -> List[Dict[str, Any]]:
+        """
+        Get the complete research state history for all question-answer cycles.
+        
+        Returns:
+            List of research state records containing 11-feature vectors and selected policies
+        """
+        return self.research_state_history
     
     def _get_policy_distribution(self) -> Dict[str, int]:
         """Get the distribution of policies used in the session."""

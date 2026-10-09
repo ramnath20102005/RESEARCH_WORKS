@@ -167,3 +167,10 @@ export const endAdaptiveInterviewApi = async (sessionId) => {
   );
   return response.data;
 };
+
+export const getResearchStateApi = async (sessionId) => {
+  const response = await axios.get(
+    `${API_BASE}/interview/adaptive/research-state?session_id=${sessionId}`
+  );
+  return response.data;
+};

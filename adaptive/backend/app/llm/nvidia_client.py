@@ -24,15 +24,30 @@ logger = logging.getLogger(__name__)
 class NVIDIAClient:
     """Client for interacting with NVIDIA NIM API using OpenAI-compatible interface."""
     
-    def __init__(self, model_name: str = "meta/llama-3.1-8b-instruct"):
+    def __init__(
+        self,
+        model_name: str = "meta/llama-3.1-8b-instruct",
+        api_key: Optional[str] = None,
+        base_url: str = "https://integrate.api.nvidia.com/v1"
+    ):
         """
         Initialize the NVIDIA NIM client.
         
         Args:
             model_name: The NVIDIA NIM model to use. Default is meta/llama-3.1-8b-instruct.
+            api_key: Optional API key (from env if not provided)
+            base_url: Base URL for NVIDIA NIM API
         """
         self.model_name = model_name
-        self.api_key = os.getenv("NVIDIA_API_KEY")
+        self.api_key = api_key
+        self.base_url = base_url
+        
+        if not self.api_key:
+            raise ValueError(
+                "API key must be provided. "
+                "For reasoning client, set NVIDIA_REASONING_API_KEY. "
+                "For question client, set NVIDIA_QUESTION_API_KEY."
+            )
         
         if not self.api_key:
             raise ValueError(
@@ -42,10 +57,12 @@ class NVIDIAClient:
         
         # Initialize OpenAI client configured for NVIDIA NIM
         self.client = OpenAI(
-            base_url="https://integrate.api.nvidia.com/v1",
+            base_url=self.base_url,
             api_key=self.api_key
         )
         logger.info(f"[NVIDIAClient] Initialized with model: {self.model_name}")
+        logger.info(f"[NVIDIAClient] Base URL: {self.base_url}")
+        logger.info(f"[NVIDIAClient] API Key configured: {'Yes' if self.api_key else 'No'}")
     
     @retry(
         stop=stop_after_attempt(2),
@@ -91,21 +108,35 @@ class NVIDIAClient:
             
             api_start = time.perf_counter()
             
+            logger.info(f"[NVIDIA] About to call OpenAI API...")
+            logger.info(f"[NVIDIA] Request details: model={self.model_name}, stream=False, max_tokens=1024")
+            
             # Generate content with NVIDIA NIM
-            completion = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=messages,
-                temperature=temperature,
-                top_p=0.7,
-                max_tokens=1024,
-                stream=False
-            )
+            try:
+                completion = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=messages,
+                    temperature=temperature,
+                    top_p=0.7,
+                    max_tokens=2048,  # Increased from 1024 to ensure complete JSON responses
+                    stream=False,
+                    timeout=60.0  # Add 60-second timeout
+                )
+                logger.info(f"[NVIDIA] API call completed successfully")
+            except Exception as api_error:
+                logger.error(f"[NVIDIA] API call failed: {type(api_error).__name__}: {str(api_error)}")
+                logger.error(f"[NVIDIA] HTTP details: {getattr(api_error, '__dict__', {})}")
+                raise
             
             api_time = time.perf_counter() - api_start
             logger.info(f"[PERF] llm_api_call: {api_time:.3f}s")
             
+            logger.info(f"[NVIDIA] Extracting response content...")
+            
             # Extract text from response
             result_text = completion.choices[0].message.content
+            
+            logger.info(f"[NVIDIA] Response content extracted, length: {len(result_text)}")
             
             total_time = time.perf_counter() - request_start
             logger.info(f"[PERF] llm_total: {total_time:.3f}s")
@@ -176,3 +207,49 @@ class NVIDIAClient:
                 f"Failed to parse NVIDIA response as JSON: {e}\n"
                 f"Response was: {response_text}"
             )
+
+
+class NVIDIANIMReasoningClient(NVIDIAClient):
+    """NVIDIA NIM client specifically for reasoning tasks (semantic evaluation)."""
+    
+    def __init__(
+        self,
+        model_name: Optional[str] = None,
+        api_key: Optional[str] = None
+    ):
+        """
+        Initialize the NVIDIA NIM reasoning client.
+        
+        Args:
+            model_name: Model ID for reasoning (from NVIDIA_REASONING_MODEL env if not provided)
+            api_key: API key for reasoning (from NVIDIA_REASONING_API_KEY env if not provided)
+        """
+        reasoning_api_key = api_key or os.getenv("NVIDIA_REASONING_API_KEY")
+        reasoning_model = model_name or os.getenv("NVIDIA_REASONING_MODEL", "openai/gpt-oss-20b")
+        
+        super().__init__(model_name=reasoning_model, api_key=reasoning_api_key)
+        
+        logger.info(f"[NVIDIA REASONING CLIENT] Initialized with model: {self.model_name}")
+
+
+class NVIDIANIMQuestionClient(NVIDIAClient):
+    """NVIDIA NIM client specifically for question generation tasks."""
+    
+    def __init__(
+        self,
+        model_name: Optional[str] = None,
+        api_key: Optional[str] = None
+    ):
+        """
+        Initialize the NVIDIA NIM question generation client.
+        
+        Args:
+            model_name: Model ID for question generation (from NVIDIA_QUESTION_MODEL env if not provided)
+            api_key: API key for question generation (from NVIDIA_QUESTION_API_KEY env if not provided)
+        """
+        question_api_key = api_key or os.getenv("NVIDIA_QUESTION_API_KEY")
+        question_model = model_name or os.getenv("NVIDIA_QUESTION_MODEL", "openai/gpt-oss-20b")
+        
+        super().__init__(model_name=question_model, api_key=question_api_key)
+        
+        logger.info(f"[NVIDIA QUESTION CLIENT] Initialized with model: {self.model_name}")

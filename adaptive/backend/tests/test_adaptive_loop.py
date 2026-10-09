@@ -17,7 +17,6 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.llm.nvidia_client import NVIDIAClient
 from app.interview.adaptive_orchestrator import AdaptiveInterviewOrchestrator
 import logging
 
@@ -33,13 +32,9 @@ def test_adaptive_loop():
     logger.info("=" * 60)
     
     try:
-        # Initialize LLM client
-        logger.info("\n[TEST] Initializing NVIDIA client...")
-        llm_client = NVIDIAClient()
-        
-        # Initialize orchestrator
-        logger.info("[TEST] Initializing adaptive orchestrator...")
-        orchestrator = AdaptiveInterviewOrchestrator(llm_client=llm_client)
+        # Initialize orchestrator (now uses task-specific LLM clients from config)
+        logger.info("\n[TEST] Initializing adaptive orchestrator...")
+        orchestrator = AdaptiveInterviewOrchestrator()
         
         # Test resume data
         resume_data = {

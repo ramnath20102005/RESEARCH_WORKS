@@ -22,5 +22,7 @@ torch>=2.0.0
 transformers>=4.35.0
 accelerate>=0.24.0
 bitsandbytes>=0.41.0
+requests>=2.31.0
+pydub>=0.25.1
 
 

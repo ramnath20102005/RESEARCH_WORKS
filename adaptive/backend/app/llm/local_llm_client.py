@@ -15,19 +15,15 @@ logger = logging.getLogger(__name__)
 
 
 class LocalLLMClient:
-    """Client for local LLM inference with GPU acceleration using Qwen1.5-4B-Chat."""
+    """Client for local LLM inference with GPU acceleration using Qwen models.
     
-    _instance = None
-    _model = None
-    _tokenizer = None
-    _device = None
+    Supports multiple model instances with different model names by using
+    a model registry keyed by model_name.
+    """
+    
+    # Model registry: keyed by model_name, stores (model, tokenizer, device, loaded_flag)
+    _model_registry = {}
     _gpu_info = {}
-    
-    def __new__(cls, *args, **kwargs):
-        """Singleton pattern to ensure model is loaded only once."""
-        if cls._instance is None:
-            cls._instance = super(LocalLLMClient, cls).__new__(cls)
-        return cls._instance
     
     def __init__(
         self,
@@ -44,14 +40,12 @@ class LocalLLMClient:
             quantization: Quantization mode (int4, int8, fp16, or none).
                          int4 is recommended for 8GB VRAM.
         """
-        if hasattr(self, '_initialized') and self._initialized:
-            return
-        
         self.model_name = model_name
         self.quantization = quantization
         
-        # Verify GPU availability
-        self._verify_gpu()
+        # Verify GPU availability (only once per class)
+        if not self._gpu_info:
+            self._verify_gpu()
         
         # Determine device
         if device is None:
@@ -59,15 +53,21 @@ class LocalLLMClient:
         else:
             self.device = device
         
-        # Load model and tokenizer (lazy load on first use)
-        self._model_loaded = False
-        self._initialized = True
+        # Initialize model entry in registry if not exists
+        if self.model_name not in self._model_registry:
+            self._model_registry[self.model_name] = {
+                'model': None,
+                'tokenizer': None,
+                'device': self.device,
+                'loaded': False,
+                'quantization': quantization
+            }
         
         logger.info(f"[LocalLLM] CUDA available: {torch.cuda.is_available()}")
         if torch.cuda.is_available():
             logger.info(f"[LocalLLM] GPU: {self._gpu_info.get('name', 'N/A')}")
         logger.info(f"[LocalLLM] Model: {self.model_name}")
-        logger.info(f"[LocalLLM] Quantization: 4-bit")
+        logger.info(f"[LocalLLM] Quantization: {quantization}")
         logger.info(f"[LocalLLM] Device: {self.device}")
     
     def _verify_gpu(self):
@@ -122,8 +122,10 @@ class LocalLLMClient:
             return {"torch_dtype": torch.float32}
     
     def _load_model(self):
-        """Load the model and tokenizer (lazy loading)."""
-        if self._model_loaded:
+        """Load the model and tokenizer (lazy loading with per-model registry)."""
+        registry_entry = self._model_registry[self.model_name]
+        
+        if registry_entry['loaded']:
             return
         
         logger.info(f"[LocalLLM] Loading model: {self.model_name}")
@@ -131,7 +133,7 @@ class LocalLLMClient:
         
         try:
             # Load tokenizer
-            self._tokenizer = AutoTokenizer.from_pretrained(
+            registry_entry['tokenizer'] = AutoTokenizer.from_pretrained(
                 self.model_name,
                 trust_remote_code=True
             )
@@ -150,13 +152,13 @@ class LocalLLMClient:
                 load_kwargs.update(self._get_quantization_config())
             
             # Load model
-            self._model = AutoModelForCausalLM.from_pretrained(
+            registry_entry['model'] = AutoModelForCausalLM.from_pretrained(
                 self.model_name,
                 **load_kwargs
             )
             
             # Set to eval mode
-            self._model.eval()
+            registry_entry['model'].eval()
             
             load_time = time.perf_counter() - load_start
             logger.info(f"[PERF][STARTUP] LocalLLM model load: {load_time*1000:.0f} ms")
@@ -164,14 +166,14 @@ class LocalLLMClient:
             logger.info("[ARCH] LocalLLM model loaded and cached")
             
             # Log actual device being used
-            if hasattr(self._model, 'device'):
-                logger.info(f"[GPU][LLM] device={self._model.device}")
-                logger.info(f"[GPU][LLM] model_device={self._model.device}")
+            if hasattr(registry_entry['model'], 'device'):
+                logger.info(f"[GPU][LLM] device={registry_entry['model'].device}")
+                logger.info(f"[GPU][LLM] model_device={registry_entry['model'].device}")
             
             if self.device == "cpu":
                 logger.warning("[LocalLLM] WARNING: CUDA unavailable - using CPU")
             
-            self._model_loaded = True
+            registry_entry['loaded'] = True
             logger.info(f"[LocalLLM] Model loaded successfully")
             
         except Exception as e:
@@ -206,6 +208,11 @@ class LocalLLMClient:
             # Ensure model is loaded
             self._load_model()
             
+            # Get model and tokenizer from registry
+            registry_entry = self._model_registry[self.model_name]
+            model = registry_entry['model']
+            tokenizer = registry_entry['tokenizer']
+            
             # Log GPU usage before inference
             if self.device == "cuda":
                 if torch.cuda.is_available():
@@ -218,8 +225,8 @@ class LocalLLMClient:
             logger.info(f"======== LOCAL LLM Request ========")
             logger.info(f"Model: {self.model_name}")
             logger.info(f"Device: {self.device}")
-            if hasattr(self._model, 'device'):
-                logger.info(f"Model device: {self._model.device}")
+            if hasattr(model, 'device'):
+                logger.info(f"Model device: {model.device}")
             logger.info(f"Quantization: {self.quantization}")
             logger.info(f"Temperature: {temperature}")
             logger.info(f"Response Format: {response_format}")
@@ -234,35 +241,40 @@ class LocalLLMClient:
             messages.append({"role": "user", "content": prompt})
             
             # Apply chat template for both text and JSON
-            text = self._tokenizer.apply_chat_template(
+            text = tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
                 add_generation_prompt=True
             )
             
             # Tokenize
-            inputs = self._tokenizer(
+            inputs = tokenizer(
                 text,
                 return_tensors="pt",
                 truncation=True,
                 max_length=2048
-            ).to(self._model.device)
+            ).to(model.device)
             
             # Generate
             inference_start = time.perf_counter()
             
-            # Adjust max_new_tokens for JSON to ensure enough space
-            max_tokens = 512 if response_format == "json" else 256
+            # Adjust max_new_tokens for JSON to reduce latency
+            # Semantic evaluation: ~96-128 tokens
+            # Question generation: ~128 tokens
+            if response_format == "json":
+                max_tokens = 128 if temperature == 0.0 else 128  # Consistent limit for JSON
+            else:
+                max_tokens = 256
             
             with torch.no_grad():
-                outputs = self._model.generate(
+                outputs = model.generate(
                     **inputs,
                     max_new_tokens=max_tokens,
                     temperature=temperature,
                     top_p=0.9,
-                    do_sample=True if temperature > 0 else False,
-                    pad_token_id=self._tokenizer.eos_token_id,
-                    eos_token_id=self._tokenizer.eos_token_id
+                    do_sample=False if temperature == 0.0 else True,  # Deterministic for temperature=0
+                    pad_token_id=tokenizer.eos_token_id,
+                    eos_token_id=tokenizer.eos_token_id
                 )
             
             inference_time = time.perf_counter() - inference_start
@@ -276,7 +288,7 @@ class LocalLLMClient:
             logger.info(f"[LOCAL_LLM][TOKENS] Generated tokens: {len(generated_ids)}")
             
             # Decode
-            generated_text = self._tokenizer.decode(
+            generated_text = tokenizer.decode(
                 generated_ids,
                 skip_special_tokens=True
             )
@@ -318,53 +330,49 @@ class LocalLLMClient:
     ) -> Dict[str, Any]:
         """
         Generate JSON content using local LLM.
-        
+
         Args:
             prompt: The user prompt to send.
             system_instruction: Optional system instruction.
             temperature: Sampling temperature (0.0 to 1.0).
-        
+
         Returns:
             The generated content as a dictionary.
         """
         # Default JSON system instruction if not provided
         if system_instruction is None:
             system_instruction = """You are an interview evaluation engine. Return ONLY valid JSON. Do not include markdown. Do not include ```json. Do not include explanations outside the JSON."""
-        
-        # Try generation with retry for empty responses
+
+        # Try generation with single retry for JSON parsing failures only
         max_retries = 2
         for attempt in range(max_retries):
             if attempt > 0:
                 # Retry with stronger JSON instruction but preserve the full prompt
-                logger.warning(f"[LocalLLM][JSON] Retry {attempt + 1}/{max_retries} with stronger JSON instruction")
-                system_instruction = "Return ONLY the JSON object. No markdown. No explanation. Follow the supplied policy and difficulty exactly. Do not simplify or remove any instructions from the prompt."
+                logger.warning(f"[LocalLLM][JSON] Retry {attempt + 1}/{max_retries} - JSON parsing failed, retrying with stronger instruction")
+                system_instruction = "Return ONLY the JSON object. No markdown. No explanation. Follow the supplied policy and difficulty exactly. Do not simplify or remove any instructions from the prompt. Your response must start with { and end with }."
                 # Keep the full prompt - do NOT truncate it
-            
+
             response_text = self.generate_content(
                 prompt=prompt,
                 system_instruction=system_instruction,
                 temperature=temperature,
                 response_format="json"
             )
-            
-            # Log raw response for debugging
-            logger.info("======================== RAW LOCAL LLM TEXT RESPONSE ========================")
-            logger.info(f"Type: {type(response_text)}")
-            logger.info(f"Repr: {repr(response_text)}")
-            logger.info(f"Content: {response_text}")
-            logger.info("========================================================================")
-            
+
+            # Log attempt information
+            logger.info(f"[LocalLLM][JSON] Attempt {attempt + 1}/{max_retries}")
+
             # Check for empty response
             if not response_text or response_text.strip() == "":
-                logger.warning(f"[LOCAL_LLM][JSON] Empty response on attempt {attempt + 1}")
+                logger.error(f"[LocalLLM][JSON] Empty response on attempt {attempt + 1}")
                 if attempt < max_retries - 1:
                     continue
                 else:
                     raise ValueError("LLM returned empty response after retries")
-            
+
             # Try to extract JSON from response (handle markdown code fences)
             json_text = response_text.strip()
-            
+
             # Remove markdown code fences if present
             if json_text.startswith("```json"):
                 json_text = json_text[7:]
@@ -373,47 +381,57 @@ class LocalLLMClient:
             if json_text.endswith("```"):
                 json_text = json_text[:-3]
             json_text = json_text.strip()
-            
+
             # Find first '{' and last '}' to extract JSON substring
             first_brace = json_text.find('{')
             last_brace = json_text.rfind('}')
-            
+
             if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
                 json_text = json_text[first_brace:last_brace + 1]
-                logger.info(f"[LOCAL_LLM][JSON] Extracted JSON substring from positions {first_brace} to {last_brace}")
-            
+                logger.info(f"[LocalLLM][JSON] Extracted JSON substring from positions {first_brace} to {last_brace}")
+            else:
+                # No JSON found - the LLM ignored the instruction
+                logger.error(f"[LocalLLM][JSON] No JSON structure found in response")
+                logger.error(f"[LocalLLM][JSON] Response starts with: {response_text[:200]}")
+                if attempt < max_retries - 1:
+                    continue
+                else:
+                    raise ValueError(
+                        f"LLM did not return JSON structure after {max_retries} attempts. "
+                        f"Response was: {response_text[:500]}"
+                    )
+
             try:
                 parsed_json = json.loads(json_text)
-                logger.info(f"[LOCAL_LLM][JSON] Parsed successfully: True")
-                logger.info(f"[LOCAL_LLM][JSON] Parsed object: {parsed_json}")
-                
+                logger.info(f"[LocalLLM][JSON] Parse success: True")
+
                 # Validate required fields for semantic evaluation (only if present)
                 required_fields = ["correctness_score", "concept_coverage", "reasoning_score", "missing_concepts", "difficulty"]
                 missing_fields = [f for f in required_fields if f not in parsed_json]
                 if missing_fields and all(field in parsed_json for field in ["question", "topic"]):
                     # This is a question generation response, not semantic evaluation
-                    logger.info(f"[LOCAL_LLM][JSON] Question generation response detected (has 'question' and 'topic' fields)")
+                    logger.info(f"[LocalLLM][JSON] Question generation response detected (has 'question' and 'topic' fields)")
                 elif missing_fields:
-                    logger.warning(f"[LOCAL_LLM][JSON] Missing required semantic fields: {missing_fields}")
-                
+                    logger.warning(f"[LocalLLM][JSON] Missing required semantic fields: {missing_fields}")
+
                 # Validate numerical ranges only if fields are present
                 if "correctness_score" in parsed_json:
                     if not 0 <= parsed_json["correctness_score"] <= 100:
-                        logger.warning(f"[LOCAL_LLM][JSON] correctness_score out of range: {parsed_json['correctness_score']}")
+                        logger.warning(f"[LocalLLM][JSON] correctness_score out of range: {parsed_json['correctness_score']}")
                 if "concept_coverage" in parsed_json:
                     if not 0 <= parsed_json["concept_coverage"] <= 100:
-                        logger.warning(f"[LOCAL_LLM][JSON] concept_coverage out of range: {parsed_json['concept_coverage']}")
+                        logger.warning(f"[LocalLLM][JSON] concept_coverage out of range: {parsed_json['concept_coverage']}")
                 if "reasoning_score" in parsed_json:
                     if not 0 <= parsed_json["reasoning_score"] <= 100:
-                        logger.warning(f"[LOCAL_LLM][JSON] reasoning_score out of range: {parsed_json['reasoning_score']}")
+                        logger.warning(f"[LocalLLM][JSON] reasoning_score out of range: {parsed_json['reasoning_score']}")
                 if "missing_concepts" in parsed_json:
                     if not 0 <= parsed_json["missing_concepts"] <= 8:
-                        logger.warning(f"[LOCAL_LLM][JSON] missing_concepts out of range: {parsed_json['missing_concepts']}")
-                
+                        logger.warning(f"[LocalLLM][JSON] missing_concepts out of range: {parsed_json['missing_concepts']}")
+
                 return parsed_json
             except json.JSONDecodeError as e:
-                logger.error(f"[LOCAL_LLM][JSON] Failed to parse JSON: {e}")
-                logger.error(f"[LOCAL_LLM][JSON] Cleaned JSON text: {json_text}")
+                logger.error(f"[LocalLLM][JSON] Parse failed: {e}")
+                logger.error(f"[LocalLLM][JSON] Cleaned JSON text: {json_text}")
                 if attempt < max_retries - 1:
                     continue
                 else:
@@ -421,5 +439,5 @@ class LocalLLMClient:
                         f"Failed to parse LLM response as JSON: {e}\n"
                         f"Response was: {response_text}"
                     )
-        
+
         raise ValueError("Failed to generate valid JSON after retries")

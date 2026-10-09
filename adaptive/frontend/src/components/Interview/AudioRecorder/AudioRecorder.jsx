@@ -22,22 +22,45 @@ export default function AudioRecorder({ onRecordingComplete, onRecordingStart, i
   const startRecording = async () => {
     try {
       console.log('[VOICE] microphone permission requested');
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      
+
+      // Request audio with higher quality settings
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          sampleRate: 48000  // Request higher sample rate for better quality
+        }
+      });
+
       console.log('[VOICE] microphone permission granted');
       console.log('[VOICE] audio tracks:', stream.getAudioTracks().length);
       const audioTrack = stream.getAudioTracks()[0];
       console.log('[VOICE] track state:', audioTrack?.readyState);
       console.log('[VOICE] track settings:', audioTrack?.getSettings());
-      
+
       recordingStartTimeRef.current = Date.now();
-      
-      mediaRecorderRef.current = new MediaRecorder(stream);
+
+      // Try to use Opus codec in WebM container for best quality
+      // Fallback to default if not supported
+      let mimeType = 'audio/webm;codecs=opus';
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        console.warn(`[VOICE] ${mimeType} not supported, trying audio/webm`);
+        mimeType = 'audio/webm';
+        if (!MediaRecorder.isTypeSupported(mimeType)) {
+          console.warn(`[VOICE] ${mimeType} not supported, using browser default`);
+          mimeType = '';
+        }
+      }
+
+      const options = mimeType ? { mimeType, audioBitsPerSecond: 128000 } : { audioBitsPerSecond: 128000 };
+      mediaRecorderRef.current = new MediaRecorder(stream, options);
       audioChunksRef.current = [];
       
       console.log('[VOICE] MediaRecorder created');
       console.log('[VOICE] MediaRecorder MIME type:', mediaRecorderRef.current.mimeType);
       console.log('[VOICE] MediaRecorder state:', mediaRecorderRef.current.state);
+      console.log('[VOICE] MediaRecorder options:', options);
 
       mediaRecorderRef.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -51,8 +74,10 @@ export default function AudioRecorder({ onRecordingComplete, onRecordingStart, i
         console.log('[VOICE] recording stopped');
         console.log('[VOICE][DEBUG] recording_duration_ms:', recordingDuration * 1000);
         console.log('[VOICE] chunks collected:', audioChunksRef.current.length);
-        
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+
+        // Use the actual MIME type from MediaRecorder
+        const blobType = mediaRecorderRef.current.mimeType || 'audio/webm';
+        const audioBlob = new Blob(audioChunksRef.current, { type: blobType });
         
         console.log('[VOICE] audio blob created');
         console.log('[VOICE][DEBUG] audio_blob_size:', audioBlob.size);

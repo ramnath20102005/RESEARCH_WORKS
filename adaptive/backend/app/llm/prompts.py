@@ -51,18 +51,23 @@ Generate exactly ONE question that:
 5. Sounds conversational and professional
 6. Would allow the candidate to demonstrate their knowledge
 
+IMPORTANT: Identify the key technical concepts that a complete answer should cover.
+
 Return your response as a JSON object with these exact keys:
 {{
     "question": "the interview question",
     "topic": "the main topic/skill being tested",
     "difficulty": "Easy",
-    "source": "Project | Internship | Skill"
+    "source": "Project | Internship | Skill",
+    "required_concepts": ["concept1", "concept2", "concept3"]
 }}
 
 The "source" field must indicate whether the question is derived from:
 - Project (final year or previous projects)
 - Internship (internship experience)
 - Skill (technical skills, frameworks, or technologies)
+
+The "required_concepts" field must be a list of 2-5 key technical concepts that a complete answer should cover. These concepts will be used to evaluate the candidate's answer.
 """
 
 # System prompt for semantic evaluation
@@ -81,6 +86,30 @@ Use the provided feature definitions exactly.
 Do not invent your own scoring system.
 
 Return ONLY valid JSON.
+
+CRITICAL: Handle explicit no-answer responses correctly.
+
+If the candidate says any of these (or similar variations):
+- "I don't know"
+- "I do not know"
+- "I don't know the answer"
+- "Not sure"
+- "No idea"
+- "Cannot answer"
+- "I can't answer"
+- "I don't remember"
+- "I'm not sure"
+- "I have no idea"
+
+You MUST assign:
+- correctness_score: 0-10 (very low)
+- concept_coverage: 0-10 (very low)
+- reasoning_score: 0-10 (very low)
+- missing_concepts: high value (typically 5-8)
+
+Do NOT give high scores for explicit unknown responses.
+
+IMPORTANT: All semantic scores use a 0-100 scale. The above 0-10 range applies ONLY to explicit "I don't know" responses.
 """
 
 # User prompt template for semantic evaluation
@@ -88,23 +117,53 @@ SEMANTIC_EVAL_USER_PROMPT = """
 QUESTION:
 {question}
 
-CANDIDATE ANSWER:
-{answer}
+TOPIC:
+{topic}
 
 CURRENT QUESTION DIFFICULTY:
 {difficulty}
 
+REQUIRED CONCEPTS:
+{required_concepts}
+
+CANDIDATE ANSWER:
+{answer}
+
 Evaluate the candidate's answer using the EXACT feature definitions below.
 
-Return ONLY valid JSON with these fields:
+The REQUIRED CONCEPTS list contains the key technical concepts that a complete answer should cover. Use this to guide your evaluation.
+
+Return ONLY valid JSON with these EXACT fields. ALL 7 fields are REQUIRED - do not omit any:
 
 {{
   "correctness_score": integer 0-100,
   "concept_coverage": integer 0-100,
   "reasoning_score": integer 0-100,
   "missing_concepts": integer 0-8,
+  "missing_concept_list": ["concept1", "concept2", ...],
   "difficulty": "Easy" | "Medium" | "Hard",
   "is_correct": true | false
+}}
+
+CRITICAL REQUIREMENTS:
+- ALL 7 fields must be present in your JSON response
+- missing_concepts: MUST be an INTEGER count (0-8), NOT a list
+- missing_concept_list: MUST be a list of strings (can be empty list [])
+- difficulty: MUST be exactly one of "Easy", "Medium", or "Hard"
+- is_correct: MUST be a boolean (true or false)
+- The integer count in missing_concepts MUST equal the length of missing_concept_list
+
+The "missing_concept_list" should contain the actual names of required concepts that the candidate failed to address or adequately explain.
+
+Example of correct format:
+{{
+  "correctness_score": 85,
+  "concept_coverage": 80,
+  "reasoning_score": 85,
+  "missing_concepts": 1,
+  "missing_concept_list": ["MongoDB storage"],
+  "difficulty": "Medium",
+  "is_correct": true
 }}
 
 EXACT FEATURE DEFINITIONS:
@@ -115,6 +174,7 @@ Measure factual and technical correctness.
 
 100:
 The answer is technically correct and contains no meaningful incorrect claims.
+Only assign 100 if the answer is genuinely complete and addresses all important aspects of the question.
 
 80-99:
 Mostly correct with minor omissions or minor imprecision.
@@ -131,8 +191,20 @@ Mostly incorrect or demonstrates major misunderstanding.
 0:
 Completely incorrect, irrelevant, or no meaningful answer.
 
-Do not give 100 merely because the answer contains the correct definition.
+CRITICAL: Do not give 100 merely because the answer contains the correct definition.
 Evaluate whether the answer actually satisfies the question.
+Consider:
+- Factual correctness
+- Completeness
+- Key concepts
+- Relevance
+- Reasoning
+- Missing concepts
+
+Example:
+Question: "What is the difference between a list and tuple in Python?"
+Answer: "A list is mutable while a tuple is immutable."
+This should NOT be 100/100/100 because other relevant distinctions (indexing, syntax, use cases) may be missing.
 
 
 CONCEPT COVERAGE (0-100, INTEGER):
@@ -252,7 +324,8 @@ Required JSON format:
   "difficulty": "...",
   "topic": "...",
   "policy": "...",
-  "source": "..."
+  "source": "...",
+  "required_concepts": ["concept1", "concept2", ...]
 }
 
 Do NOT return plain text.
@@ -267,7 +340,7 @@ POLICY SELECTED BY TABPFN:
 {policy}
 
 EFFECTIVE DIFFICULTY:
-{current_difficulty}
+{effective_difficulty}
 
 CURRENT DIFFICULTY:
 {current_difficulty}
@@ -287,32 +360,44 @@ Concept Coverage: {concept_coverage}
 Reasoning: {reasoning_score}
 Missing Concepts: {missing_concepts}
 
+MISSING CONCEPT LIST:
+{missing_concept_list}
+
+REQUIRED CONCEPTS (from current question):
+{required_concepts}
+
+AVAILABLE TOPICS (for Switch Topic):
+{available_topics}
+
 Generate ONE interview question following the TabPFN policy: {policy}
 
 POLICY RULES:
 
 Increase Difficulty:
-- effective difficulty must be exactly one level higher
+- effective difficulty is already calculated as one level higher by the policy application layer
 - Easy → Medium, Medium → Hard, Hard → Hard
+- question must be at the supplied effective difficulty
 - question must be materially more challenging than the previous question
 - require deeper understanding, reasoning, implementation, trade-offs, edge cases, or application
 - do NOT ask a basic definition question
 
 Maintain Difficulty:
-- effective difficulty remains unchanged
+- effective difficulty remains at the supplied level
 - generate a question at the same cognitive difficulty
 - do not deliberately increase or decrease complexity
 
 Reduce Difficulty:
-- effective difficulty must be exactly one level lower
+- effective difficulty is already calculated as one level lower by the policy application layer
 - Hard → Medium, Medium → Easy, Easy → Easy
+- question must be at the supplied effective difficulty
 - simplify the question
 - focus on fundamentals, direct explanation, or simpler examples
 
 Probe Missing Concept:
-- target one or more concepts identified as missing by semantic evaluation
+- target one or more concepts from the MISSING CONCEPT LIST
 - difficulty should remain at the effective difficulty supplied
-- question must specifically test the missing concept
+- question must specifically test at least one missing concept
+- the question should explicitly reference or require the missing concept
 
 Ask Application Question:
 - require the candidate to apply the concept to a practical/real-world scenario
@@ -323,32 +408,37 @@ Ask Follow-up Question:
 - directly build on the candidate's previous answer
 - probe clarification, reasoning, assumptions, implementation details, or consequences
 - do not repeat the previous question
+- use the effective difficulty supplied
 
 Switch Topic:
-- select a different relevant technical topic from the candidate's resume/project/skills
-- do not continue asking essentially the same question
+- select a DIFFERENT topic from the AVAILABLE TOPICS list
+- the returned topic MUST NOT equal the current topic: {topic}
+- choose a topic that is relevant to the candidate's background
 - use the effective difficulty supplied
 
 CRITICAL: The LLM MUST NOT change or reinterpret the TabPFN policy.
 The LLM's job is ONLY to generate a question satisfying the supplied policy and effective difficulty.
 
-Return JSON with these 5 fields:
+Return JSON with these 6 fields:
 - question: the generated question text
-- difficulty: exactly "{current_difficulty}"
-- topic: exactly "{topic}"
+- difficulty: exactly "{effective_difficulty}"
+- topic: the selected topic (for Switch Topic, must be different from current topic)
 - policy: exactly "{policy}"
 - source: one of "Resume", "Project", "Skill", "Follow-up", "Application", "Topic"
+- required_concepts: list of key concepts that the question tests (can be empty if not applicable)
 
 Example JSON:
 {{
   "question": "Consider a Python application that receives a large sequence of records and frequently needs indexed access but rarely modifies the sequence. Compare the trade-offs of using a list versus a tuple in this scenario, including mutability, memory considerations, and performance implications. Which would you choose and why?",
-  "difficulty": "{current_difficulty}",
-  "topic": "{topic}",
+  "difficulty": "{effective_difficulty}",
+  "topic": "selected_topic_here",
   "policy": "{policy}",
-  "source": "Skill"
+  "source": "Skill",
+  "required_concepts": ["list", "tuple", "mutability", "performance"]
 }}
 
-CRITICAL: Use EXACT values for difficulty, topic, and policy.
+CRITICAL: Use EXACT values for difficulty and policy.
+For Switch Topic, the returned topic MUST be different from the current topic.
 Do NOT change the policy.
-Do NOT change the difficulty.
+Do NOT override the effective difficulty.
 """

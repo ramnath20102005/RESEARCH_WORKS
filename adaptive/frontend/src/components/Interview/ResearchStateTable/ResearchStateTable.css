@@ -1,0 +1,152 @@
+.research-state-table {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.research-state-table h3 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.behavioral-status {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.status-label {
+  font-weight: 600;
+  color: #856404;
+  margin-right: 8px;
+}
+
+.status-value {
+  color: #856404;
+  font-style: italic;
+}
+
+.loading-message,
+.error-message,
+.no-data-message {
+  text-align: center;
+  padding: 30px 20px;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.error-message {
+  color: #dc3545;
+  background: #f8d7da;
+  border-radius: 4px;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.research-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: white;
+}
+
+.research-table thead {
+  background: #343a40;
+  color: white;
+}
+
+.research-table th {
+  padding: 12px 8px;
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 2px solid #495057;
+}
+
+.research-table tbody tr {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.research-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.research-table td {
+  padding: 10px 8px;
+  text-align: center;
+  border-right: 1px solid #dee2e6;
+  white-space: nowrap;
+  color: #212529;
+}
+
+.research-table td:last-child {
+  border-right: none;
+}
+
+.research-table .policy-cell {
+  font-weight: 600;
+  color: #004499;
+  background: #e6f0ff;
+  border-radius: 3px;
+  padding: 6px 8px;
+}
+
+.table-legend {
+  margin-top: 15px;
+  padding: 12px;
+  background: #e9ecef;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.legend-title {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.legend-items {
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+.legend-items span {
+  margin-right: 15px;
+}
+
+@media (max-width: 768px) {
+  .research-state-table {
+    padding: 15px;
+    margin: 15px 0;
+  }
+  
+  .research-table {
+    font-size: 10px;
+  }
+  
+  .research-table th,
+  .research-table td {
+    padding: 8px 4px;
+  }
+  
+  .legend-items {
+    font-size: 11px;
+  }
+  
+  .legend-items span {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 4px;
+  }
+}
