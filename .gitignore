@@ -60,6 +60,8 @@ training.log
 # Small models (<10 MB) are included for convenience
 interview_training/outputs/models/random_forest.pkl
 interview_training/outputs/models/tabpfn_*.pkl
+interview_training/outputs/models/Models.zip
+interview_training/outputs/models/Models/
 adaptive/backend/kokoro-v1.0.onnx
 adaptive/backend/voices.bin
 
@@ -72,6 +74,19 @@ adaptive/backend/voices.bin
 # Large binary files
 *.npy
 *.npz
+
+# Large presentation files
+*.pptx
+*.ppt
+
+# Large PDF files (research reports, graphs)
+interview_training/outputs/*.pdf
+# Exception: keep small documentation PDFs if needed
+
+# Uploaded files (user uploads)
+adaptive/backend/app/uploads/*.pdf
+adaptive/backend/app/uploads/*.docx
+adaptive/backend/app/uploads/*.doc
 
 # OS files
 .DS_Store
